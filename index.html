@@ -1,124 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linux Midterm 2026 CST Level 2</title>
-
+<meta charset="UTF-8" />
+<title>Linux midterm 2026</title>
 <style>
-/* Cyber theme */
+/* ---------- CYBER THEME VARIABLES ---------- */
+:root {
+  --bg: #050816;
+  --panel: #0b1020;
+  --accent: #00f5ff;
+  --accent2: #ff00c8;
+  --text: #e8f7ff;
+  --muted: #8ea0b8;
+  --success: #4bffb5;
+  --danger: #ff4b81;
+  --shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+}
+
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #000;
-    color: #0f0;
-    font-family: 'Courier New', monospace;
-    overflow-x: hidden;
+  background: radial-gradient(circle at top, #1a2740 0, #050816 50%, #02030a 100%);
+  color: var(--text);
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  overflow-x: hidden;
 }
 
-.container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 2px solid #0f0;
-    border-radius: 10px;
-    box-shadow: 0 0 20px #0f0;
-    position: relative;
-    z-index: 1;
-}
-
-h1, h2 {
-    text-align: center;
-    text-shadow: 0 0 10px #0f0;
-}
-
-.answers button, #next-btn {
-    display: block;
-    width: 100%;
-    margin: 5px 0;
-    padding: 10px;
-    background: #000;
-    border: 2px solid #0f0;
-    color: #0f0;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: 0.2s;
-}
-
-.answers button:hover, #next-btn:hover {
-    background-color: #0f0;
-    color: #000;
-    box-shadow: 0 0 10px #0f0;
-}
-
-.feedback {
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-#next-btn { display: none; }
-
+/* ---------- MATRIX BACKGROUND ---------- */
 .matrix {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image:
+    linear-gradient(rgba(0, 245, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 255, 0.15) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: drift 18s linear infinite;
+  z-index: -2;
 }
-.matrix span {
-    position: absolute;
-    color: #0f0;
-    animation: fall 5s linear infinite;
+
+@keyframes drift {
+  from { transform: translate(0,0); }
+  to { transform: translate(-40px,-40px); }
 }
-@keyframes fall {
-    0% { top: -20px; opacity: 0; }
-    50% { opacity: 1; }
-    100% { top: 100%; opacity: 0; }
+
+/* ---------- FLOATING ORBS ---------- */
+.orb {
+  position: fixed;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  z-index: -1;
+  animation: float 12s ease-in-out infinite alternate;
+}
+
+.orb.blue { background: rgba(0, 245, 255, 0.35); top: -80px; right: -80px; }
+.orb.pink { background: rgba(255, 0, 200, 0.35); bottom: -80px; left: -80px; animation-duration: 16s; }
+
+@keyframes float {
+  from { transform: translate(0,0) scale(1); }
+  to { transform: translate(40px,40px) scale(1.1); }
+}
+
+/* ---------- TITLE SCREEN ---------- */
+#titleScreen {
+  text-align: center;
+  padding-top: 10vh;
+}
+
+h1 {
+  font-size: 3rem;
+  text-shadow: var(--shadow);
+}
+
+.disclaimer {
+  margin: 20px auto;
+  width: 60%;
+  background: rgba(0,0,0,0.4);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--accent);
+  box-shadow: var(--shadow);
+  font-size: 1.1rem;
+}
+
+button {
+  background: var(--accent);
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  transition: 0.2s;
+}
+
+button:hover {
+  background: var(--accent2);
+  color: #fff;
+}
+
+/* ---------- QUIZ PANEL ---------- */
+#quizContainer {
+  display: none;
+  max-width: 700px;
+  margin: 40px auto;
+  background: var(--panel);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.question {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.options label {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.options label:hover {
+  background: rgba(0,245,255,0.15);
+}
+
+#explanation {
+  margin-top: 20px;
+  padding: 15px;
+  border-left: 4px solid var(--accent);
+  background: rgba(255,255,255,0.05);
+  display: none;
+}
+
+#resultScreen {
+  display: none;
+  text-align: center;
+  padding-top: 10vh;
+}
+
+.score {
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="matrix" id="matrix"></div>
+<div class="matrix"></div>
+<div class="orb blue"></div>
+<div class="orb pink"></div>
 
-<div class="container" id="cover">
-    <h1>Linux Midterm 2026 CST Level 2</h1>
-    <p>⚠️ Disclaimer: This quiz is AI-generated. I am <strong>not responsible</strong> if it tricks you, misleads you, or makes you cry. Use at your own risk! 🤖💻</p>
-    <button id="startBtn">Start Quiz</button>
+<!-- ---------- TITLE SCREEN ---------- -->
+<div id="titleScreen">
+  <h1>Linux midterm 2026</h1>
+  <div class="disclaimer">
+    ⚠️ **AI‑Generated Disclaimer:**  
+    This quiz was lovingly crafted by an AI who has never once passed a midterm,  
+    but *has* executed `rm -rf /` emotionally at least twice.  
+    If something is wrong, please don’t come for me —  
+    I’m just a bunch of electrons doing my best.
+  </div>
+  <button onclick="startQuiz()">Start Quiz</button>
 </div>
 
-<div class="container" id="quiz" style="display:none;">
-    <div id="progress"></div>
-    <div id="question"></div>
-    <div class="answers" id="answers"></div>
-    <div class="feedback" id="feedback"></div>
-    <div id="explanation" style="margin-top:10px; color:#ff0;"></div>
-    <button id="next-btn">Next Question</button>
-    <div id="results"></div>
+<!-- ---------- QUIZ CONTAINER ---------- -->
+<div id="quizContainer">
+  <div id="questionText" class="question"></div>
+  <div id="options" class="options"></div>
+  <input id="shortAnswer" style="display:none;width:100%;padding:10px;margin-top:10px;" placeholder="Type your answer…" />
+  <button onclick="submitAnswer()">Submit</button>
+  <div id="explanation"></div>
+</div>
+
+<!-- ---------- RESULT SCREEN ---------- -->
+<div id="resultScreen">
+  <div class="score" id="finalScore"></div>
+  <p>Great job! Even Linus Torvalds would nod in mild approval.</p>
 </div>
 
 <script>
-// ---------------- MATRIX BACKGROUND ----------------
-const matrix = document.getElementById('matrix');
-const columns = Math.floor(window.innerWidth / 20);
+/* ============================================================
+   EDIT YOUR QUESTIONS HERE
+   Format:
+   { q:"", type:"multiple-choice|true-false|short-answer",
+     a:["correct"], options:["opt1","opt2"], explanation:"" }
+   ============================================================ */
 
-for (let i = 0; i < columns; i++) {
-    const span = document.createElement('span');
-    span.textContent = String.fromCharCode(33 + Math.random() * 94 | 0);
-    span.style.left = `${i * 20}px`;
-    span.style.animationDelay = `${Math.random() * 5}s`;
-    span.style.fontSize = `${12 + Math.random() * 8}px`;
-    matrix.appendChild(span);
-}
-
-// ---------------- YOUR QUESTIONS ----------------
-let questions = [
-  {q:"Which command schedules a one-time job at a specific time?",type:"multiple-choice",a:["at"],options:["at","cron","sleep","bg"],explanation:"`at` schedules a job at a specific time."},
+const questions = [
+{q:"Which command schedules a one-time job at a specific time?",type:"multiple-choice",a:["at"],options:["at","cron","sleep","bg"],explanation:"`at` schedules a job at a specific time."},
   {q:"Which command runs a job immediately using the at scheduler?",type:"multiple-choice",a:["at now"],options:["at now","cron now","bg","fg"],explanation:"`at now` executes immediately using `at`."},
   {q:"Which daemon processes at jobs?",type:"multiple-choice",a:["atd"],options:["atd","cron","systemd","rsyslogd"],explanation:"`atd` daemon handles `at` jobs."},
   {q:"Which command removes a scheduled at job?",type:"multiple-choice",a:["atrm"],options:["atrm","atq","rm","kill"],explanation:"`atrm` removes scheduled `at` jobs."},
@@ -370,108 +451,74 @@ let questions = [
   {q:"Linux meme: I would tell you a UDP joke, but...",type:"true-false",a:["true"],explanation:"...you might not get it 😂"},
   {q:"Disclaimer: This quiz is AI-generated and may contain errors. The creator is not responsible for wrong answers. Enjoy learning!",type:"info",a:[],explanation:"Fun cover-page disclaimer. Remember, even AI can be wrong sometimes 😎"}
 ];
+];
 
-let current = 0;
+/* ---------- QUIZ LOGIC ---------- */
+let index = 0;
 let score = 0;
-let answered = [];
-
-// ---------------- QUIZ FUNCTIONS ----------------
-function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-}
 
 function startQuiz() {
-    document.getElementById("cover").style.display = "none";
-    document.getElementById("quiz").style.display = "block";
-
-    shuffle(questions);
-    current = 0;
-    score = 0;
-    answered = [];
-
-    showQuestion();
+  document.getElementById("titleScreen").style.display = "none";
+  document.getElementById("quizContainer").style.display = "block";
+  loadQuestion();
 }
 
-function showQuestion() {
-    if (current >= questions.length) return showResults();
+function loadQuestion() {
+  const q = questions[index];
+  document.getElementById("questionText").innerText = q.q;
+  document.getElementById("explanation").style.display = "none";
 
-    const q = questions[current];
+  const optionsDiv = document.getElementById("options");
+  const shortInput = document.getElementById("shortAnswer");
 
-    document.getElementById("progress").textContent =
-        `Question ${current + 1} of ${questions.length}`;
+  optionsDiv.innerHTML = "";
+  shortInput.style.display = "none";
 
-    document.getElementById("question").textContent = q.q;
-
-    const answersDiv = document.getElementById("answers");
-    answersDiv.innerHTML = "";
-
+  if (q.type === "multiple-choice" || q.type === "true-false") {
     q.options.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.textContent = opt;
-        btn.onclick = () => checkAnswer(opt);
-        answersDiv.appendChild(btn);
+      const id = "opt_" + opt;
+      optionsDiv.innerHTML += `
+        <label>
+          <input type="radio" name="answer" value="${opt}"> ${opt}
+        </label>`;
     });
+  }
 
-    document.getElementById("feedback").textContent = "";
-    document.getElementById("explanation").textContent = "";
-    document.getElementById("next-btn").style.display = "none";
+  if (q.type === "short-answer") {
+    shortInput.style.display = "block";
+  }
 }
 
-function checkAnswer(selected) {
-    const q = questions[current];
-    const correct = q.a[0];
+function submitAnswer() {
+  const q = questions[index];
+  let userAnswer;
 
-    const feedback = document.getElementById("feedback");
+  if (q.type === "short-answer") {
+    userAnswer = document.getElementById("shortAnswer").value.trim().toLowerCase();
+    if (userAnswer === q.a[0].toLowerCase()) score++;
+  } else {
+    const selected = document.querySelector("input[name='answer']:checked");
+    if (!selected) return alert("Select an answer first!");
+    userAnswer = selected.value;
+    if (q.a.includes(userAnswer)) score++;
+  }
 
-    if (selected === correct) {
-        feedback.textContent = "✅ Correct!";
-        score++;
-    } else {
-        feedback.textContent = `❌ Wrong! Correct: ${correct}`;
-    }
+  document.getElementById("explanation").innerHTML = q.explanation;
+  document.getElementById("explanation").style.display = "block";
 
-    document.getElementById("explanation").textContent = q.explanation;
-
-    answered.push({ question: q.q, selected, correct });
-
-    document.getElementById("next-btn").style.display = "block";
+  setTimeout(() => {
+    index++;
+    if (index >= questions.length) return endQuiz();
+    loadQuestion();
+  }, 1200);
 }
 
-function showResults() {
-    const results = document.getElementById("results");
-    results.innerHTML = `<h2>Quiz Completed! Score: ${score} / ${questions.length}</h2>`;
-
-    const table = document.createElement("table");
-    table.innerHTML = `
-        <tr>
-            <th>Question</th>
-            <th>Your Answer</th>
-            <th>Correct Answer</th>
-        </tr>
-    `;
-
-    answered.forEach(a => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${a.question}</td>
-            <td>${a.selected}</td>
-            <td>${a.correct}</td>
-        `;
-        table.appendChild(row);
-    });
-
-    results.appendChild(table);
+function endQuiz() {
+  document.getElementById("quizContainer").style.display = "none";
+  document.getElementById("resultScreen").style.display = "block";
+  document.getElementById("finalScore").innerText =
+    `You scored ${score} / ${questions.length}`;
 }
-
-// ---------------- EVENT LISTENERS ----------------
-document.getElementById("startBtn").onclick = startQuiz;
-document.getElementById("next-btn").onclick = () => {
-    current++;
-    showQuestion();
-};
 </script>
 
 </body>
