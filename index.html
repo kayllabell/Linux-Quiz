@@ -342,6 +342,45 @@ document.getElementById("startBtn").addEventListener("click", function() {
   
   // show the first question
   showQuestion();
+//======================Chatgpt "fix"=============
+function showQuestion(){
+    if(currentQuestionIndex>=selectedQuestions.length){showResults();return;}
+    const qObj = selectedQuestions[currentQuestionIndex];
+    progressEl.textContent=`Question ${currentQuestionIndex+1} of ${selectedQuestions.length}`;
+    questionEl.textContent=qObj.q;
+    feedbackEl.textContent="";
+    memeEl.textContent="";
+    nextBtn.style.display="none";
+    answersEl.innerHTML="";
+    
+    if(qObj.type==="multiple-choice"||qObj.type==="true-false"){
+        let options=qObj.type==="true-false"?["True","False"]:shuffleArray(qObj.options);
+        options.forEach(opt=>{
+            const btn=document.createElement("button");
+            btn.textContent=opt;
+            btn.addEventListener("click",()=>selectAnswer(opt));
+            answersEl.appendChild(btn);
+        });
+    } else if(qObj.type==="fill-in"){
+        const input=document.createElement("input"); input.type="text"; input.placeholder="Type your answer here"; answersEl.appendChild(input);
+        const submitBtn=document.createElement("button"); submitBtn.textContent="Submit"; submitBtn.addEventListener("click",()=>selectAnswer(input.value)); answersEl.appendChild(submitBtn);
+    } else if(qObj.type==="select-all"){
+        qObj.options.forEach(opt=>{
+            const cb=document.createElement("input"); cb.type="checkbox"; cb.value=opt; cb.id="cb"+opt;
+            const label=document.createElement("label"); label.htmlFor="cb"+opt; label.textContent=opt;
+            answersEl.appendChild(cb); answersEl.appendChild(label); answersEl.appendChild(document.createElement("br"));
+        });
+        const submitBtn=document.createElement("button"); submitBtn.textContent="Submit";
+        submitBtn.addEventListener("click",()=>{
+            const selected=Array.from(answersEl.querySelectorAll("input[type=checkbox]")).filter(cb=>cb.checked).map(cb=>cb.value);
+            selectAnswer(selected);
+        });
+        answersEl.appendChild(submitBtn);
+    }
+}
+
+//===============================================================
+
 
 // ===================== QUIZ LOGIC =====================
 let selectedQuestions = [];
