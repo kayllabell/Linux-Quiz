@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Linux Midterm 2026 CST Level 2</title>
+
 <style>
 /* Cyber theme */
 body {
@@ -22,17 +23,13 @@ body {
     border: 2px solid #0f0;
     border-radius: 10px;
     box-shadow: 0 0 20px #0f0;
-    position: relative; /* important for clickable buttons */
+    position: relative;
     z-index: 1;
 }
 
 h1, h2 {
     text-align: center;
     text-shadow: 0 0 10px #0f0;
-}
-
-button, input[type="text"] {
-    font-family: monospace;
 }
 
 .answers button, #next-btn {
@@ -62,13 +59,8 @@ button, input[type="text"] {
 
 #next-btn { display: none; }
 
-#progress { margin-bottom: 20px; }
-
-.meme { margin-top: 15px; font-style: italic; color: #ff0; }
-
-/* Matrix background */
 .matrix {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -80,7 +72,6 @@ button, input[type="text"] {
 .matrix span {
     position: absolute;
     color: #0f0;
-    font-size: 16px;
     animation: fall 5s linear infinite;
 }
 @keyframes fall {
@@ -90,40 +81,42 @@ button, input[type="text"] {
 }
 </style>
 </head>
+
 <body>
 
 <div class="matrix" id="matrix"></div>
 
 <div class="container" id="cover">
     <h1>Linux Midterm 2026 CST Level 2</h1>
-    <p>⚠️ Disclaimer: This quiz is AI-generated. I am <strong>not responsible</strong> if it tricks you, misleads you, or makes your terminal cry. Use at your own risk! 🤖💻</p>
+    <p>⚠️ Disclaimer: This quiz is AI-generated. I am <strong>not responsible</strong> if it tricks you, misleads you, or makes you cry. Use at your own risk! 🤖💻</p>
     <button id="startBtn">Start Quiz</button>
 </div>
 
 <div class="container" id="quiz" style="display:none;">
     <div id="progress"></div>
-    <div class="question" id="question"></div>
+    <div id="question"></div>
     <div class="answers" id="answers"></div>
     <div class="feedback" id="feedback"></div>
-    <div class="meme" id="meme"></div>
+    <div id="explanation" style="margin-top:10px; color:#ff0;"></div>
     <button id="next-btn">Next Question</button>
     <div id="results"></div>
 </div>
 
 <script>
-// Subtle matrix background
+// ---------------- MATRIX BACKGROUND ----------------
 const matrix = document.getElementById('matrix');
 const columns = Math.floor(window.innerWidth / 20);
-for(let i=0;i<columns;i++){
+
+for (let i = 0; i < columns; i++) {
     const span = document.createElement('span');
-    span.textContent = String.fromCharCode(33 + Math.random()*94 | 0);
-    span.style.left = `${i*20}px`;
-    span.style.animationDelay = `${Math.random()*5}s`;
-    span.style.fontSize = `${12+Math.random()*8}px`;
+    span.textContent = String.fromCharCode(33 + Math.random() * 94 | 0);
+    span.style.left = `${i * 20}px`;
+    span.style.animationDelay = `${Math.random() * 5}s`;
+    span.style.fontSize = `${12 + Math.random() * 8}px`;
     matrix.appendChild(span);
 }
 
-// Quiz logic
+// ---------------- YOUR QUESTIONS ----------------
 let questions = [
   {q:"Which command schedules a one-time job at a specific time?",type:"multiple-choice",a:["at"],options:["at","cron","sleep","bg"],explanation:"`at` schedules a job at a specific time."},
   {q:"Which command runs a job immediately using the at scheduler?",type:"multiple-choice",a:["at now"],options:["at now","cron now","bg","fg"],explanation:"`at now` executes immediately using `at`."},
@@ -378,93 +371,107 @@ let questions = [
   {q:"Disclaimer: This quiz is AI-generated and may contain errors. The creator is not responsible for wrong answers. Enjoy learning!",type:"info",a:[],explanation:"Fun cover-page disclaimer. Remember, even AI can be wrong sometimes 😎"}
 ];
 
-let currentQuestionIndex = 0;
+let current = 0;
 let score = 0;
-let answeredQuestions = [];
+let answered = [];
 
-function shuffleQuestions() {
-    for (let i = questions.length - 1; i > 0; i--) {
+// ---------------- QUIZ FUNCTIONS ----------------
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [questions[i], questions[j]] = [questions[j], questions[i]];
+        [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+}
+
+function startQuiz() {
+    document.getElementById("cover").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+
+    shuffle(questions);
+    current = 0;
+    score = 0;
+    answered = [];
+
+    showQuestion();
 }
 
 function showQuestion() {
-    if(currentQuestionIndex >= questions.length) {
-        showResults();
-        return;
-    }
-    const q = questions[currentQuestionIndex];
-    document.getElementById('progress').textContent = `Question ${currentQuestionIndex+1} of ${questions.length}`;
-    document.getElementById('question').textContent = q ? q.question : 'Add your question text here!';
-    const answersDiv = document.getElementById('answers');
-    answersDiv.innerHTML = '';
-    if(q && q.options){
-        q.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.textContent = opt;
-            btn.addEventListener('click', () => checkAnswer(opt));
-            answersDiv.appendChild(btn);
-        });
-    } else {
-        // placeholder buttons
-        ['A','B','C','D'].forEach(opt => {
-            const btn = document.createElement('button');
-            btn.textContent = opt;
-            btn.addEventListener('click', () => checkAnswer(opt));
-            answersDiv.appendChild(btn);
-        });
-    }
-    document.getElementById('feedback').textContent = '';
-    document.getElementById('next-btn').style.display = 'none';
+    if (current >= questions.length) return showResults();
+
+    const q = questions[current];
+
+    document.getElementById("progress").textContent =
+        `Question ${current + 1} of ${questions.length}`;
+
+    document.getElementById("question").textContent = q.q;
+
+    const answersDiv = document.getElementById("answers");
+    answersDiv.innerHTML = "";
+
+    q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        answersDiv.appendChild(btn);
+    });
+
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("explanation").textContent = "";
+    document.getElementById("next-btn").style.display = "none";
 }
 
-function checkAnswer(answer) {
-    const q = questions[currentQuestionIndex];
-    const correct = q ? q.answer : 'A'; // placeholder
-    const feedback = document.getElementById('feedback');
-    if(answer === correct){
-        feedback.textContent = '✅ Correct!';
+function checkAnswer(selected) {
+    const q = questions[current];
+    const correct = q.a[0];
+
+    const feedback = document.getElementById("feedback");
+
+    if (selected === correct) {
+        feedback.textContent = "✅ Correct!";
         score++;
     } else {
         feedback.textContent = `❌ Wrong! Correct: ${correct}`;
     }
-    answeredQuestions.push({question: q ? q.question : 'Question', selected: answer, correct: correct});
-    document.getElementById('next-btn').style.display = 'block';
+
+    document.getElementById("explanation").textContent = q.explanation;
+
+    answered.push({ question: q.q, selected, correct });
+
+    document.getElementById("next-btn").style.display = "block";
 }
-
-document.getElementById('next-btn').addEventListener('click', () => {
-    currentQuestionIndex++;
-    showQuestion();
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    const startBtn = document.getElementById("startBtn");
-    startBtn.addEventListener("click", function() {
-        document.getElementById("cover").style.display = "none";
-        document.getElementById("quiz").style.display = "block";
-        shuffleQuestions();
-        currentQuestionIndex = 0;
-        score = 0;
-        answeredQuestions = [];
-        showQuestion();
-    });
-});
 
 function showResults() {
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = `<h2>Quiz Completed! Score: ${score} / ${questions.length}</h2>`;
-    const table = document.createElement('table');
-    const header = document.createElement('tr');
-    header.innerHTML = '<th>Question</th><th>Your Answer</th><th>Correct Answer</th>';
-    table.appendChild(header);
-    answeredQuestions.forEach(a => {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${a.question}</td><td class="${a.selected===a.correct?'correct':'wrong'}">${a.selected}</td><td>${a.correct}</td>`;
+    const results = document.getElementById("results");
+    results.innerHTML = `<h2>Quiz Completed! Score: ${score} / ${questions.length}</h2>`;
+
+    const table = document.createElement("table");
+    table.innerHTML = `
+        <tr>
+            <th>Question</th>
+            <th>Your Answer</th>
+            <th>Correct Answer</th>
+        </tr>
+    `;
+
+    answered.forEach(a => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${a.question}</td>
+            <td>${a.selected}</td>
+            <td>${a.correct}</td>
+        `;
         table.appendChild(row);
     });
-    resultsDiv.appendChild(table);
+
+    results.appendChild(table);
 }
+
+// ---------------- EVENT LISTENERS ----------------
+document.getElementById("startBtn").onclick = startQuiz;
+document.getElementById("next-btn").onclick = () => {
+    current++;
+    showQuestion();
+};
 </script>
 
 </body>
