@@ -5,14 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Linux Midterm 2026 CST Level 2</title>
 <style>
+/* Cyber theme */
 body {
+    margin: 0;
+    padding: 0;
     background-color: #000;
     color: #0f0;
     font-family: 'Courier New', monospace;
-    margin: 0;
-    padding: 0;
     overflow-x: hidden;
 }
+
 .container {
     max-width: 900px;
     margin: 50px auto;
@@ -20,18 +22,19 @@ body {
     border: 2px solid #0f0;
     border-radius: 10px;
     box-shadow: 0 0 20px #0f0;
-    position: relative;
+    position: relative; /* important for clickable buttons */
     z-index: 1;
 }
+
 h1, h2 {
     text-align: center;
     text-shadow: 0 0 10px #0f0;
 }
-h2 { margin-top: 0; }
-#cover { text-align: center; margin-top: 50px; }
+
 button, input[type="text"] {
     font-family: monospace;
 }
+
 .answers button, #next-btn {
     display: block;
     width: 100%;
@@ -45,27 +48,25 @@ button, input[type="text"] {
     border-radius: 5px;
     transition: 0.2s;
 }
+
 .answers button:hover, #next-btn:hover {
     background-color: #0f0;
     color: #000;
     box-shadow: 0 0 10px #0f0;
 }
-.feedback { margin-top: 15px; font-weight: bold; }
+
+.feedback {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
 #next-btn { display: none; }
+
 #progress { margin-bottom: 20px; }
-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-th, td { border: 1px solid #0f0; padding: 8px; text-align: left; }
-th { background-color: #111; }
-td.correct { background-color: #0a0; color: #000; }
-td.wrong { background-color: #a00; color: #fff; }
+
 .meme { margin-top: 15px; font-style: italic; color: #ff0; }
-.flicker {
-    animation: flickerAnimation 1s infinite;
-}
-@keyframes flickerAnimation {
-    0%, 100% { text-shadow: 0 0 2px #0f0; opacity: 1; }
-    50% { text-shadow: 0 0 15px #0f0; opacity: 0.85; }
-}
+
+/* Matrix background */
 .matrix {
     position: absolute;
     top: 0;
@@ -79,24 +80,26 @@ td.wrong { background-color: #a00; color: #fff; }
 .matrix span {
     position: absolute;
     color: #0f0;
-    font-size: 12px;
-    opacity: 0.3;
+    font-size: 16px;
+    animation: fall 5s linear infinite;
+}
+@keyframes fall {
+    0% { top: -20px; opacity: 0; }
+    50% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
 }
 </style>
 </head>
 <body>
 
-<!-- Matrix Background -->
 <div class="matrix" id="matrix"></div>
 
-<!-- Cover Page -->
 <div class="container" id="cover">
-    <h1 class="flicker">Linux Midterm 2026 CST Level 2</h1>
+    <h1>Linux Midterm 2026 CST Level 2</h1>
     <p>⚠️ Disclaimer: This quiz is AI-generated. I am <strong>not responsible</strong> if it tricks you, misleads you, or makes your terminal cry. Use at your own risk! 🤖💻</p>
     <button id="startBtn">Start Quiz</button>
 </div>
 
-<!-- Quiz Container -->
 <div class="container" id="quiz" style="display:none;">
     <div id="progress"></div>
     <div class="question" id="question"></div>
@@ -108,9 +111,20 @@ td.wrong { background-color: #a00; color: #fff; }
 </div>
 
 <script>
+// Subtle matrix background
+const matrix = document.getElementById('matrix');
+const columns = Math.floor(window.innerWidth / 20);
+for(let i=0;i<columns;i++){
+    const span = document.createElement('span');
+    span.textContent = String.fromCharCode(33 + Math.random()*94 | 0);
+    span.style.left = `${i*20}px`;
+    span.style.animationDelay = `${Math.random()*5}s`;
+    span.style.fontSize = `${12+Math.random()*8}px`;
+    matrix.appendChild(span);
+}
 
-// ===================== QUESTION POOL =====================
-const questionPool = [
+// Quiz logic
+let questions = [
   {q:"Which command schedules a one-time job at a specific time?",type:"multiple-choice",a:["at"],options:["at","cron","sleep","bg"],explanation:"`at` schedules a job at a specific time."},
   {q:"Which command runs a job immediately using the at scheduler?",type:"multiple-choice",a:["at now"],options:["at now","cron now","bg","fg"],explanation:"`at now` executes immediately using `at`."},
   {q:"Which daemon processes at jobs?",type:"multiple-choice",a:["atd"],options:["atd","cron","systemd","rsyslogd"],explanation:"`atd` daemon handles `at` jobs."},
@@ -364,150 +378,94 @@ const questionPool = [
   {q:"Disclaimer: This quiz is AI-generated and may contain errors. The creator is not responsible for wrong answers. Enjoy learning!",type:"info",a:[],explanation:"Fun cover-page disclaimer. Remember, even AI can be wrong sometimes 😎"}
 ];
 
-// =====================
-const questions = [
-    // Example question:
-    // {
-    //   q: "Which command shows the current directory?",
-    //   type: "multiple-choice",
-    //   options: ["pwd","ls","cd","whoami"],
-    //   a: ["pwd"],
-    //   explanation: "pwd prints the present working directory."
-    // }
-];
-
-// =====================
-// Quiz State
-// =====================
 let currentQuestionIndex = 0;
 let score = 0;
 let answeredQuestions = [];
-let shuffledQuestions = [];
 
-// =====================
-// Shuffle Questions
-// =====================
 function shuffleQuestions() {
-    shuffledQuestions = [...questions].sort(() => Math.random() - 0.5).slice(0,50);
+    for (let i = questions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [questions[i], questions[j]] = [questions[j], questions[i]];
+    }
 }
 
-// =====================
-// Show Question
-// =====================
 function showQuestion() {
-    if(currentQuestionIndex >= shuffledQuestions.length){
+    if(currentQuestionIndex >= questions.length) {
         showResults();
         return;
     }
-    const q = shuffledQuestions[currentQuestionIndex];
-    document.getElementById("progress").innerText = `Question ${currentQuestionIndex + 1} of ${shuffledQuestions.length}`;
-    document.getElementById("question").innerText = q.q;
-    document.getElementById("feedback").innerText = "";
-    document.getElementById("meme").innerText = "";
-
-    const answersDiv = document.getElementById("answers");
-    answersDiv.innerHTML = "";
-
-    if(q.type === "true-false"){
-        ["True","False"].forEach(ans=>{
-            const btn = document.createElement("button");
-            btn.innerText = ans;
-            btn.onclick = ()=>checkAnswer(ans.toLowerCase());
+    const q = questions[currentQuestionIndex];
+    document.getElementById('progress').textContent = `Question ${currentQuestionIndex+1} of ${questions.length}`;
+    document.getElementById('question').textContent = q ? q.question : 'Add your question text here!';
+    const answersDiv = document.getElementById('answers');
+    answersDiv.innerHTML = '';
+    if(q && q.options){
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.textContent = opt;
+            btn.addEventListener('click', () => checkAnswer(opt));
             answersDiv.appendChild(btn);
         });
-    } else if(q.type === "multiple-choice"){
-        q.options.forEach(opt=>{
-            const btn = document.createElement("button");
-            btn.innerText = opt;
-            btn.onclick = ()=>checkAnswer(opt);
+    } else {
+        // placeholder buttons
+        ['A','B','C','D'].forEach(opt => {
+            const btn = document.createElement('button');
+            btn.textContent = opt;
+            btn.addEventListener('click', () => checkAnswer(opt));
             answersDiv.appendChild(btn);
         });
     }
-
-    document.getElementById("next-btn").style.display = "none";
+    document.getElementById('feedback').textContent = '';
+    document.getElementById('next-btn').style.display = 'none';
 }
 
-// =====================
-// Check Answer
-// =====================
-function checkAnswer(answer){
-    const q = shuffledQuestions[currentQuestionIndex];
-    const correct = q.a.includes(answer);
-    const feedback = document.getElementById("feedback");
-
-    if(correct){
-        feedback.innerText = "✅ Correct! " + (q.explanation||"");
+function checkAnswer(answer) {
+    const q = questions[currentQuestionIndex];
+    const correct = q ? q.answer : 'A'; // placeholder
+    const feedback = document.getElementById('feedback');
+    if(answer === correct){
+        feedback.textContent = '✅ Correct!';
         score++;
     } else {
-        feedback.innerText = "❌ Wrong! " + (q.explanation||"");
+        feedback.textContent = `❌ Wrong! Correct: ${correct}`;
     }
-
-    answeredQuestions.push({question:q.q, selected:answer, correct:q.a[0]});
-    Array.from(document.getElementById("answers").children).forEach(btn=>btn.disabled=true);
-    document.getElementById("next-btn").style.display = "block";
+    answeredQuestions.push({question: q ? q.question : 'Question', selected: answer, correct: correct});
+    document.getElementById('next-btn').style.display = 'block';
 }
 
-// =====================
-// Next Question
-// =====================
-document.getElementById("next-btn").addEventListener("click", function(){
+document.getElementById('next-btn').addEventListener('click', () => {
     currentQuestionIndex++;
     showQuestion();
 });
 
-// =====================
-// Show Results
-// =====================
-function showResults(){
-    document.getElementById("quiz").innerHTML = `<h2>Quiz Complete!</h2>
-        <p>Your Score: ${score} / ${shuffledQuestions.length}</p>
-        <h3>Review:</h3>
-        <table>
-        <tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th></tr>
-        ${answeredQuestions.map(a=>`<tr class="${a.selected===a.correct?'correct':'wrong'}"><td>${a.question}</td><td>${a.selected}</td><td>${a.correct}</td></tr>`).join('')}
-        </table>`;
-}
-
-// =====================
-// Start Quiz Button
-// =====================
-window.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("startBtn").addEventListener("click", function(){
+document.addEventListener("DOMContentLoaded", function() {
+    const startBtn = document.getElementById("startBtn");
+    startBtn.addEventListener("click", function() {
         document.getElementById("cover").style.display = "none";
         document.getElementById("quiz").style.display = "block";
         shuffleQuestions();
-        currentQuestionIndex=0;
-        score=0;
-        answeredQuestions=[];
+        currentQuestionIndex = 0;
+        score = 0;
+        answeredQuestions = [];
         showQuestion();
     });
 });
 
-// =====================
-// Cyber Matrix Background
-// =====================
-function createMatrix() {
-    const matrix = document.getElementById("matrix");
-    for(let i=0;i<200;i++){
-        const span = document.createElement("span");
-        span.innerText = String.fromCharCode(33 + Math.floor(Math.random()*94));
-        span.style.top = Math.random()*100 + "%";
-        span.style.left = Math.random()*100 + "%";
-        span.style.fontSize = (5 + Math.random()*15) + "px";
-        matrix.appendChild(span);
-    }
-}
-function flickerMatrix() {
-    const spans = document.querySelectorAll(".matrix span");
-    spans.forEach(s=>{
-        if(Math.random() < 0.02) s.style.opacity = (0.1 + Math.random()*0.5);
+function showResults() {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = `<h2>Quiz Completed! Score: ${score} / ${questions.length}</h2>`;
+    const table = document.createElement('table');
+    const header = document.createElement('tr');
+    header.innerHTML = '<th>Question</th><th>Your Answer</th><th>Correct Answer</th>';
+    table.appendChild(header);
+    answeredQuestions.forEach(a => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${a.question}</td><td class="${a.selected===a.correct?'correct':'wrong'}">${a.selected}</td><td>${a.correct}</td>`;
+        table.appendChild(row);
     });
+    resultsDiv.appendChild(table);
 }
-createMatrix();
-setInterval(flickerMatrix, 200);
 </script>
+
 </body>
 </html>
-
-
-<script>
