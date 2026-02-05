@@ -3,194 +3,200 @@
 <head>
 <meta charset="UTF-8" />
 <title>Linux midterm 2026</title>
+
 <style>
-/* ---------- CYBER THEME VARIABLES ---------- */
+/* ============================================================
+   MATRIX GREEN CYBER THEME
+   ============================================================ */
+
 :root {
-  --bg: #050816;
-  --panel: #0b1020;
-  --accent: #00f5ff;
-  --accent2: #ff00c8;
-  --text: #e8f7ff;
-  --muted: #8ea0b8;
-  --success: #4bffb5;
-  --danger: #ff4b81;
-  --shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+  --bg: #000;
+  --panel: rgba(0, 20, 0, 0.85);
+  --green: #00ff41;
+  --green-dim: #00aa2e;
+  --text: #d9ffd9;
+  --shadow: 0 0 15px rgba(0, 255, 65, 0.6);
 }
 
 body {
-  background: radial-gradient(circle at top, #1a2740 0, #050816 50%, #02030a 100%);
+  background: black;
   color: var(--text);
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Courier New", monospace;
   margin: 0;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-/* ---------- MATRIX BACKGROUND ---------- */
-.matrix {
+/* ---------- MATRIX RAIN BACKGROUND ---------- */
+canvas#matrix {
   position: fixed;
   inset: 0;
-  pointer-events: none;
-  opacity: 0.15;
-  background-image:
-    linear-gradient(rgba(0, 245, 255, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 245, 255, 0.15) 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: drift 18s linear infinite;
-  z-index: -2;
-}
-
-@keyframes drift {
-  from { transform: translate(0,0); }
-  to { transform: translate(-40px,-40px); }
-}
-
-/* ---------- FLOATING ORBS ---------- */
-.orb {
-  position: fixed;
-  width: 350px;
-  height: 350px;
-  border-radius: 50%;
-  filter: blur(40px);
-  opacity: 0.6;
   z-index: -1;
-  animation: float 12s ease-in-out infinite alternate;
+  background: black;
 }
 
-.orb.blue { background: rgba(0, 245, 255, 0.35); top: -80px; right: -80px; }
-.orb.pink { background: rgba(255, 0, 200, 0.35); bottom: -80px; left: -80px; animation-duration: 16s; }
-
-@keyframes float {
-  from { transform: translate(0,0) scale(1); }
-  to { transform: translate(40px,40px) scale(1.1); }
-}
-
-/* ---------- TITLE SCREEN ---------- */
-#titleScreen {
-  text-align: center;
-  padding-top: 10vh;
-}
-
-h1 {
-  font-size: 3rem;
-  text-shadow: var(--shadow);
-}
-
-.disclaimer {
-  margin: 20px auto;
-  width: 60%;
-  background: rgba(0,0,0,0.4);
+/* ---------- BOOT LOG ---------- */
+#bootLog {
+  position: absolute;
+  top: 20vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--green);
   padding: 20px;
-  border-radius: 10px;
-  border: 1px solid var(--accent);
-  box-shadow: var(--shadow);
+  color: var(--green);
   font-size: 1.1rem;
-}
-
-button {
-  background: var(--accent);
-  border: none;
-  padding: 15px 30px;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #000;
-  font-weight: bold;
   box-shadow: var(--shadow);
-  transition: 0.2s;
-}
-
-button:hover {
-  background: var(--accent2);
-  color: #fff;
+  border-radius: 8px;
+  opacity: 1;
+  transition: opacity 1.5s ease;
+  white-space: pre-line;
 }
 
 /* ---------- QUIZ PANEL ---------- */
 #quizContainer {
-  display: none;
-  max-width: 700px;
+  max-width: 800px;
   margin: 40px auto;
   background: var(--panel);
   padding: 30px;
-  border-radius: 12px;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--green);
+  border-radius: 10px;
   box-shadow: var(--shadow);
+  display: none;
 }
 
 .question {
   font-size: 1.4rem;
   margin-bottom: 20px;
+  color: var(--green);
+  text-shadow: var(--shadow);
 }
 
 .options label {
   display: block;
   margin: 10px 0;
   padding: 10px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 6px;
+  background: rgba(0, 255, 65, 0.05);
+  border-left: 3px solid var(--green-dim);
   cursor: pointer;
   transition: 0.2s;
 }
 
 .options label:hover {
-  background: rgba(0,245,255,0.15);
+  background: rgba(0, 255, 65, 0.15);
+}
+
+button {
+  background: var(--green);
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 15px;
+  box-shadow: var(--shadow);
+}
+
+button:hover {
+  background: var(--green-dim);
+  color: white;
 }
 
 #explanation {
   margin-top: 20px;
   padding: 15px;
-  border-left: 4px solid var(--accent);
-  background: rgba(255,255,255,0.05);
+  border-left: 4px solid var(--green);
+  background: rgba(0, 255, 65, 0.1);
   display: none;
 }
 
 #resultScreen {
-  display: none;
   text-align: center;
   padding-top: 10vh;
+  display: none;
 }
 
 .score {
   font-size: 2rem;
-  margin-bottom: 20px;
+  color: var(--green);
+  text-shadow: var(--shadow);
 }
 </style>
 </head>
 
 <body>
 
-<div class="matrix"></div>
-<div class="orb blue"></div>
-<div class="orb pink"></div>
+<!-- MATRIX RAIN CANVAS -->
+<canvas id="matrix"></canvas>
 
-<!-- ---------- TITLE SCREEN ---------- -->
-<div id="titleScreen">
-  <h1>Linux midterm 2026</h1>
-  <div class="disclaimer">
-    ⚠️ **AI‑Generated Disclaimer:**  
-    This quiz was lovingly crafted by an AI who has never once passed a midterm,  
-    but *has* executed `rm -rf /` emotionally at least twice.  
-    If something is wrong, please don’t come for me —  
-    I’m just a bunch of electrons doing my best.
-  </div>
-  <button onclick="startQuiz()">Start Quiz</button>
+<!-- BOOT LOG -->
+<div id="bootLog">
+[BOOT] Starting system...
+[BOOT] Fetching question modules...
+[ERROR] Question 17 attempted to escape containment. Reinforcing firewall...
+[WARNING] AI-generated content detected.
+[WARNING] If something is wrong, please direct all complaints to /dev/null.
+[INFO] Attempting to appear confident...
+[INFO] Confidence.exe has stopped responding.
+[BOOT] Linux Midterm 2026 loading...
 </div>
 
-<!-- ---------- QUIZ CONTAINER ---------- -->
+<!-- QUIZ -->
 <div id="quizContainer">
   <div id="questionText" class="question"></div>
   <div id="options" class="options"></div>
-  <input id="shortAnswer" style="display:none;width:100%;padding:10px;margin-top:10px;" placeholder="Type your answer…" />
+  <input id="shortAnswer" style="display:none;width:100%;padding:10px;margin-top:10px;background:black;color:var(--green);border:1px solid var(--green);" placeholder="Type your answer…" />
   <button onclick="submitAnswer()">Submit</button>
   <div id="explanation"></div>
 </div>
 
-<!-- ---------- RESULT SCREEN ---------- -->
+<!-- RESULTS -->
 <div id="resultScreen">
   <div class="score" id="finalScore"></div>
-  <p>Great job! Even Linus Torvalds would nod in mild approval.</p>
+  <p>System: Quiz complete. You have survived… for now.</p>
 </div>
 
 <script>
+/* ============================================================
+   MATRIX RAIN ANIMATION
+   ============================================================ */
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const chars = "01";
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+
+let drops = [];
+for (let i = 0; i < columns; i++) drops[i] = 1;
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#00ff41";
+  ctx.font = fontSize + "px Courier";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+      drops[i] = 0;
+
+    drops[i]++;
+  }
+}
+
+setInterval(drawMatrix, 50);
+];
+
 /* ============================================================
    EDIT YOUR QUESTIONS HERE
    Format:
@@ -451,14 +457,214 @@ const questions = [
   {q:"Linux meme: I would tell you a UDP joke, but...",type:"true-false",a:["true"],explanation:"...you might not get it 😂"},
   {q:"Disclaimer: This quiz is AI-generated and may contain errors. The creator is not responsible for wrong answers. Enjoy learning!",type:"info",a:[],explanation:"Fun cover-page disclaimer. Remember, even AI can be wrong sometimes 😎"}
 ];
-];
 
-/* ---------- QUIZ LOGIC ---------- */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Linux midterm 2026</title>
+
+<style>
+/* ============================================================
+   MATRIX GREEN CYBER THEME
+   ============================================================ */
+
+:root {
+  --bg: #000;
+  --panel: rgba(0, 20, 0, 0.85);
+  --green: #00ff41;
+  --green-dim: #00aa2e;
+  --text: #d9ffd9;
+  --shadow: 0 0 15px rgba(0, 255, 65, 0.6);
+}
+
+body {
+  background: black;
+  color: var(--text);
+  font-family: "Courier New", monospace;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* ---------- MATRIX RAIN BACKGROUND ---------- */
+canvas#matrix {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: black;
+}
+
+/* ---------- BOOT LOG ---------- */
+#bootLog {
+  position: absolute;
+  top: 20vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--green);
+  padding: 20px;
+  color: var(--green);
+  font-size: 1.1rem;
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  opacity: 1;
+  transition: opacity 1.5s ease;
+  white-space: pre-line;
+}
+
+/* ---------- QUIZ PANEL ---------- */
+#quizContainer {
+  max-width: 800px;
+  margin: 40px auto;
+  background: var(--panel);
+  padding: 30px;
+  border: 1px solid var(--green);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  display: none;
+}
+
+.question {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: var(--green);
+  text-shadow: var(--shadow);
+}
+
+.options label {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(0, 255, 65, 0.05);
+  border-left: 3px solid var(--green-dim);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.options label:hover {
+  background: rgba(0, 255, 65, 0.15);
+}
+
+button {
+  background: var(--green);
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 15px;
+  box-shadow: var(--shadow);
+}
+
+button:hover {
+  background: var(--green-dim);
+  color: white;
+}
+
+#explanation {
+  margin-top: 20px;
+  padding: 15px;
+  border-left: 4px solid var(--green);
+  background: rgba(0, 255, 65, 0.1);
+  display: none;
+}
+
+#resultScreen {
+  text-align: center;
+  padding-top: 10vh;
+  display: none;
+}
+
+.score {
+  font-size: 2rem;
+  color: var(--green);
+  text-shadow: var(--shadow);
+}
+</style>
+</head>
+
+<body>
+
+<!-- MATRIX RAIN CANVAS -->
+<canvas id="matrix"></canvas>
+
+<!-- BOOT LOG -->
+<div id="bootLog">
+[BOOT] Starting system...
+[BOOT] Fetching question modules...
+[ERROR] Question 17 attempted to escape containment. Reinforcing firewall...
+[WARNING] AI-generated content detected.
+[WARNING] If something is wrong, please direct all complaints to /dev/null.
+[INFO] Attempting to appear confident...
+[INFO] Confidence.exe has stopped responding.
+[BOOT] Linux Midterm 2026 loading...
+</div>
+
+<!-- QUIZ -->
+<div id="quizContainer">
+  <div id="questionText" class="question"></div>
+  <div id="options" class="options"></div>
+  <input id="shortAnswer" style="display:none;width:100%;padding:10px;margin-top:10px;background:black;color:var(--green);border:1px solid var(--green);" placeholder="Type your answer…" />
+  <button onclick="submitAnswer()">Submit</button>
+  <div id="explanation"></div>
+</div>
+
+<!-- RESULTS -->
+<div id="resultScreen">
+  <div class="score" id="finalScore"></div>
+  <p>System: Quiz complete. You have survived… for now.</p>
+</div>
+
+<script>
+/* ============================================================
+   MATRIX RAIN ANIMATION
+   ============================================================ */
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const chars = "01";
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+
+let drops = [];
+for (let i = 0; i < columns; i++) drops[i] = 1;
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#00ff41";
+  ctx.font = fontSize + "px Courier";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+      drops[i] = 0;
+
+    drops[i]++;
+  }
+}
+
+setInterval(drawMatrix, 50);
+
+
+/* ============================================================
+   QUIZ LOGIC
+   ============================================================ */
+
 let index = 0;
 let score = 0;
 
 function startQuiz() {
-  document.getElementById("titleScreen").style.display = "none";
   document.getElementById("quizContainer").style.display = "block";
   loadQuestion();
 }
@@ -476,7 +682,6 @@ function loadQuestion() {
 
   if (q.type === "multiple-choice" || q.type === "true-false") {
     q.options.forEach(opt => {
-      const id = "opt_" + opt;
       optionsDiv.innerHTML += `
         <label>
           <input type="radio" name="answer" value="${opt}"> ${opt}
@@ -519,7 +724,23 @@ function endQuiz() {
   document.getElementById("finalScore").innerText =
     `You scored ${score} / ${questions.length}`;
 }
+
+/* ============================================================
+   BOOT LOG FADE + QUIZ START
+   ============================================================ */
+
+setTimeout(() => {
+  const boot = document.getElementById("bootLog");
+  boot.style.opacity = 0;
+
+  setTimeout(() => {
+    boot.style.display = "none";
+    startQuiz();
+  }, 1500);
+
+}, 4000); // <-- 4 seconds before fade
 </script>
 
 </body>
 </html>
+
