@@ -24,14 +24,8 @@ h1, h2 {
     text-align: center;
     text-shadow: 0 0 10px #0f0;
 }
-h2 {
-    margin-top: 0;
-}
-#cover {
-    display: block;
-    text-align: center;
-    margin-top: 50px;
-}
+h2 { margin-top: 0; }
+#cover { text-align: center; margin-top: 50px; }
 button, input[type="text"] {
     font-family: monospace;
 }
@@ -53,42 +47,15 @@ button, input[type="text"] {
     color: #000;
     box-shadow: 0 0 10px #0f0;
 }
-.feedback {
-    margin-top: 15px;
-    font-weight: bold;
-}
-#next-btn {
-    display: none;
-}
-#progress {
-    margin-bottom: 20px;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-th, td {
-    border: 1px solid #0f0;
-    padding: 8px;
-    text-align: left;
-}
-th {
-    background-color: #111;
-}
-td.correct {
-    background-color: #0a0;
-    color: #000;
-}
-td.wrong {
-    background-color: #a00;
-    color: #fff;
-}
-.meme {
-    margin-top: 15px;
-    font-style: italic;
-    color: #ff0;
-}
+.feedback { margin-top: 15px; font-weight: bold; }
+#next-btn { display: none; }
+#progress { margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #0f0; padding: 8px; text-align: left; }
+th { background-color: #111; }
+td.correct { background-color: #0a0; color: #000; }
+td.wrong { background-color: #a00; color: #fff; }
+.meme { margin-top: 15px; font-style: italic; color: #ff0; }
 </style>
 </head>
 <body>
@@ -111,48 +78,257 @@ td.wrong {
 <script>
 // ===================== QUESTION POOL =====================
 const questionPool = [
-    { q: "Which command schedules a one-time job at a specific time?", type:"multiple-choice", a:["at"], options:["at","cron","sleep","bg"], explanation:"`at` schedules a job at a specific time." },
-    { q: "Which command runs a job immediately using the at scheduler?", type:"multiple-choice", a:["at now"], options:["at now","cron now","bg","fg"], explanation:"`at now` executes immediately using `at`." },
-    { q: "Which daemon processes at jobs?", type:"multiple-choice", a:["atd"], options:["atd","cron","systemd","rsyslogd"], explanation:"`atd` daemon handles `at` jobs." },
-    { q: "Which command removes a scheduled at job?", type:"multiple-choice", a:["atrm"], options:["atrm","atq","rm","kill"], explanation:"`atrm` removes scheduled `at` jobs." },
-    { q: "Which command lists pending at jobs?", type:"multiple-choice", a:["atq"], options:["atq","atd","cron","jobs"], explanation:"`atq` lists pending `at` jobs." },
-    { q: "Which command is used for pattern scanning and processing?", type:"multiple-choice", a:["awk"], options:["awk","sed","grep","cat"], explanation:"`awk` is for pattern scanning and text processing." },
-    { q: "Which command resumes a suspended job in the background?", type:"multiple-choice", a:["bg"], options:["bg","fg","jobs","kill"], explanation:"`bg` resumes a suspended job in the background." },
-    { q: "Which command decompresses .bz2 files?", type:"multiple-choice", a:["bunzip2"], options:["bunzip2","bzip2","gzip","gunzip"], explanation:"`bunzip2` decompresses `.bz2` files." },
-    { q: "Which command compresses files using the bzip2 algorithm?", type:"multiple-choice", a:["bzip2"], options:["bzip2","bunzip2","gzip","gunzip"], explanation:"`bzip2` compresses files using bzip2." },
-    { q: "Which command displays file contents?", type:"multiple-choice", a:["cat"], options:["cat","less","more","head"], explanation:"`cat` outputs file contents." },
-    { q: "The command `cd` changes the current directory.", type:"true-false", a:["True"], explanation:"`cd` is used to change directories." },
-    { q: "Which command modifies password aging settings?", type:"multiple-choice", a:["chage"], options:["chage","passwd","usermod","chown"], explanation:"`chage` modifies password expiration." },
-    { q: "Which command changes a file’s group ownership?", type:"multiple-choice", a:["chgrp"], options:["chgrp","chown","chmod","grpadd"], explanation:"`chgrp` changes the group ownership." },
-    { q: "Which command changes file permissions?", type:"multiple-choice", a:["chmod"], options:["chmod","chown","chgrp","umask"], explanation:"`chmod` changes permissions." },
-    { q: "Which command changes file ownership?", type:"multiple-choice", a:["chown"], options:["chown","chgrp","chmod","usermod"], explanation:"`chown` changes file ownership." },
-    { q: "The daemon crond runs scheduled cron jobs.", type:"true-false", a:["True"], explanation:"`crond` runs cron jobs as scheduled." },
-    { q: "Which command edits a user’s cron table?", type:"multiple-choice", a:["crontab"], options:["crontab","cronedit","vim /etc/cron","at"], explanation:"`crontab -e` edits cron jobs for a user." },
-    { q: "Which daemon synchronizes system time?", type:"multiple-choice", a:["chronyd"], options:["chronyd","ntpd","systemd","timed"], explanation:"`chronyd` keeps system time synchronized." },
-    { q: "Which command displays or sets the system date/time?", type:"multiple-choice", a:["date"], options:["date","time","timedatectl","clock"], explanation:"`date` shows or sets system date/time." },
-    { q: "Which command shows disk space usage?", type:"multiple-choice", a:["df"], options:["df","du","lsblk","fdisk"], explanation:"`df` shows disk space usage for mounted filesystems." },
-    { q: "Which command queries DNS servers?", type:"multiple-choice", a:["dig"], options:["dig","host","nslookup","ping"], explanation:"`dig` queries DNS records." },
-    { q: "The command `sudo` runs commands as root.", type:"true-false", a:["True"], explanation:"`sudo` executes commands with root privileges." },
-    { q: "Which command lists directory contents?", type:"multiple-choice", a:["ls"], options:["ls","dir","tree","find"], explanation:"`ls` lists files and directories." },
-    { q: "Which command searches text patterns in files?", type:"multiple-choice", a:["grep"], options:["grep","awk","sed","find"], explanation:"`grep` searches text patterns." },
-    { q: "The `top` command shows system resource usage in real time.", type:"true-false", a:["True"], explanation:"`top` displays running processes and resource usage." },
-    { q: "Which command displays the current working directory?", type:"multiple-choice", a:["pwd"], options:["pwd","cd","ls","whoami"], explanation:"`pwd` prints current working directory." },
-    { q: "Which command safely edits sudoers?", type:"multiple-choice", a:["visudo"], options:["visudo","nano /etc/sudoers","sudoedit","vim /etc/sudoers"], explanation:"Always use `visudo` to safely edit sudoers." },
-    { q: "The root directory is represented by `/`.", type:"true-false", a:["True"], explanation:"`/` is the root of the filesystem." },
-    { q: "Which directory contains user home directories?", type:"multiple-choice", a:["/home"], options:["/home","/root","/usr","/var"], explanation:"User homes are stored in `/home`." },
-    { q: "Which directory contains bootloader files?", type:"multiple-choice", a:["/boot"], options:["/boot","/bin","/usr","/etc"], explanation:"`/boot` contains bootloader and kernel files." },
-    { q: "Which directory stores temporary mounts?", type:"multiple-choice", a:["/mnt"], options:["/mnt","/media","/tmp","/var"], explanation:"Temporary mounts often go in `/mnt`." },
-    { q: "Which command prints text to the terminal?", type:"multiple-choice", a:["echo"], options:["echo","print","cat","write"], explanation:"`echo` prints text to terminal." },
-    { q: "Which command decompresses .gz files?", type:"multiple-choice", a:["gunzip"], options:["gunzip","gzip","bunzip2","tar"], explanation:"`gunzip` decompresses `.gz` files." },
-    { q: "Which command compresses files using gzip?", type:"multiple-choice", a:["gzip"], options:["gzip","gunzip","bzip2","tar"], explanation:"`gzip` compresses files." },
-    { q: "Which command shows who is logged in?", type:"multiple-choice", a:["w"], options:["w","who","users","id"], explanation:"`w` shows logged in users." },
-    { q: "Which command creates a new user?", type:"multiple-choice", a:["useradd"], options:["useradd","adduser","usermod","passwd"], explanation:"`useradd` creates a new user account." },
-    { q: "The command `rm -rf /` is safe to run on your system.", type:"true-false", a:["False"], explanation:"Never run `rm -rf /` unless you want to destroy everything. 💀" },
-    { q: "Which command shows system uptime?", type:"multiple-choice", a:["uptime"], options:["uptime","time","top","date"], explanation:"`uptime` shows how long the system has been running." },
-    { q: "Which command shows IP addresses?", type:"multiple-choice", a:["ip addr"], options:["ip addr","ifconfig","ip link","netstat"], explanation:"`ip addr` lists network interfaces and addresses." },
-    { q: "Which command connects to a remote system via SSH?", type:"multiple-choice", a:["ssh"], options:["ssh","telnet","rlogin","scp"], explanation:"`ssh` connects to remote systems securely." },
-    { q: "Which command transfers files securely?", type:"multiple-choice", a:["sftp"], options:["sftp","scp","ftp","rsync"], explanation:"`sftp` securely transfers files." }
-    // Continue filling out the full pool until all questions you gave are included
+  {q:"Which command schedules a one-time job at a specific time?",type:"multiple-choice",a:["at"],options:["at","cron","sleep","bg"],explanation:"`at` schedules a job at a specific time."},
+  {q:"Which command runs a job immediately using the at scheduler?",type:"multiple-choice",a:["at now"],options:["at now","cron now","bg","fg"],explanation:"`at now` executes immediately using `at`."},
+  {q:"Which daemon processes at jobs?",type:"multiple-choice",a:["atd"],options:["atd","cron","systemd","rsyslogd"],explanation:"`atd` daemon handles `at` jobs."},
+  {q:"Which command removes a scheduled at job?",type:"multiple-choice",a:["atrm"],options:["atrm","atq","rm","kill"],explanation:"`atrm` removes scheduled `at` jobs."},
+  {q:"Which command lists pending at jobs?",type:"multiple-choice",a:["atq"],options:["atq","atd","cron","jobs"],explanation:"`atq` lists pending `at` jobs."},
+  {q:"Which command is used for pattern scanning and processing?",type:"multiple-choice",a:["awk"],options:["awk","sed","grep","cat"],explanation:"`awk` is for pattern scanning and text processing."},
+  {q:"Which command resumes a suspended job in the background?",type:"multiple-choice",a:["bg"],options:["bg","fg","jobs","kill"],explanation:"`bg` resumes a suspended job in the background."},
+  {q:"Which command decompresses .bz2 files?",type:"multiple-choice",a:["bunzip2"],options:["bunzip2","bzip2","gzip","gunzip"],explanation:"`bunzip2` decompresses `.bz2` files."},
+  {q:"Which command compresses files using the bzip2 algorithm?",type:"multiple-choice",a:["bzip2"],options:["bzip2","bunzip2","gzip","gunzip"],explanation:"`bzip2` compresses files using bzip2."},
+  {q:"Which command displays file contents?",type:"multiple-choice",a:["cat"],options:["cat","less","more","head"],explanation:"`cat` outputs file contents."},
+  {q:"The command `cd` changes the current directory.",type:"true-false",a:["True"],explanation:"`cd` is used to change directories."},
+  {q:"Which command modifies password aging settings?",type:"multiple-choice",a:["chage"],options:["chage","passwd","usermod","chown"],explanation:"`chage` modifies password expiration."},
+  {q:"Which command changes a file’s group ownership?",type:"multiple-choice",a:["chgrp"],options:["chgrp","chown","chmod","grpadd"],explanation:"`chgrp` changes the group ownership."},
+  {q:"Which command changes file permissions?",type:"multiple-choice",a:["chmod"],options:["chmod","chown","chgrp","umask"],explanation:"`chmod` changes permissions."},
+  {q:"Which command changes file ownership?",type:"multiple-choice",a:["chown"],options:["chown","chgrp","chmod","usermod"],explanation:"`chown` changes file ownership."},
+  {q:"The daemon crond runs scheduled cron jobs.",type:"true-false",a:["True"],explanation:"`crond` runs cron jobs as scheduled."},
+  {q:"Which command edits a user’s cron table?",type:"multiple-choice",a:["crontab"],options:["crontab","cronedit","vim /etc/cron","at"],explanation:"`crontab -e` edits cron jobs for a user."},
+  {q:"Which daemon synchronizes system time?",type:"multiple-choice",a:["chronyd"],options:["chronyd","ntpd","systemd","timed"],explanation:"`chronyd` keeps system time synchronized."},
+  {q:"Which command displays or sets the system date/time?",type:"multiple-choice",a:["date"],options:["date","time","timedatectl","clock"],explanation:"`date` shows or sets system date/time."},
+  {q:"Which command shows disk space usage?",type:"multiple-choice",a:["df"],options:["df","du","lsblk","fdisk"],explanation:"`df` shows disk space usage for mounted filesystems."},
+  {q:"Which command queries DNS servers?",type:"multiple-choice",a:["dig"],options:["dig","host","nslookup","ping"],explanation:"`dig` queries DNS records."},
+  {q:"The command `sudo` runs commands as root.",type:"true-false",a:["True"],explanation:"`sudo` executes commands with root privileges."},
+  {q:"Which command lists directory contents?",type:"multiple-choice",a:["ls"],options:["ls","dir","tree","find"],explanation:"`ls` lists files and directories."},
+  {q:"Which command searches text patterns in files?",type:"multiple-choice",a:["grep"],options:["grep","awk","sed","find"],explanation:"`grep` searches text patterns."},
+  {q:"The `top` command shows system resource usage in real time.",type:"true-false",a:["True"],explanation:"`top` displays running processes and resource usage."},
+  {q:"Which command displays the current working directory?",type:"multiple-choice",a:["pwd"],options:["pwd","cd","ls","whoami"],explanation:"`pwd` prints current working directory."},
+  {q:"Which command safely edits sudoers?",type:"multiple-choice",a:["visudo"],options:["visudo","nano /etc/sudoers","sudoedit","vim /etc/sudoers"],explanation:"Always use `visudo` to safely edit sudoers."},
+  {q:"The root directory is represented by `/`.",type:"true-false",a:["True"],explanation:"`/` is the root of the filesystem."},
+  {q:"Which directory contains user home directories?",type:"multiple-choice",a:["/home"],options:["/home","/root","/usr","/var"],explanation:"User homes are stored in `/home`."},
+  {q:"Which directory contains bootloader files?",type:"multiple-choice",a:["/boot"],options:["/boot","/bin","/usr","/etc"],explanation:"`/boot` contains bootloader and kernel files."},
+  {q:"Which directory stores temporary mounts?",type:"multiple-choice",a:["/mnt"],options:["/mnt","/media","/tmp","/var"],explanation:"Temporary mounts often go in `/mnt`."},
+  {q:"Which command prints text to the terminal?",type:"multiple-choice",a:["echo"],options:["echo","print","cat","write"],explanation:"`echo` prints text to terminal."},
+  {q:"Which command decompresses .gz files?",type:"multiple-choice",a:["gunzip"],options:["gunzip","gzip","bunzip2","tar"],explanation:"`gunzip` decompresses `.gz` files."},
+  {q:"Which command compresses files using gzip?",type:"multiple-choice",a:["gzip"],options:["gzip","gunzip","bzip2","tar"],explanation:"`gzip` compresses files."},
+  {q:"Which command shows who is logged in?",type:"multiple-choice",a:["w"],options:["w","who","users","id"],explanation:"`w` shows logged in users."},
+  {q:"Which command creates a new user?",type:"multiple-choice",a:["useradd"],options:["useradd","adduser","usermod","passwd"],explanation:"`useradd` creates a new user account."},
+  {q:"The command `rm -rf /` is safe to run on your system.",type:"true-false",a:["False"],explanation:"Never run `rm -rf /` unless you want to destroy everything. 💀"},
+  {q:"Which command shows system uptime?",type:"multiple-choice",a:["uptime"],options:["uptime","time","top","date"],explanation:"`uptime` shows how long the system has been running."},
+  {q:"Which command shows IP addresses?",type:"multiple-choice",a:["ip addr"],options:["ip addr","ifconfig","ip link","netstat"],explanation:"`ip addr` lists network interfaces and addresses."},
+  {q:"Which command connects to a remote system via SSH?",type:"multiple-choice",a:["ssh"],options:["ssh","telnet","rlogin","scp"],explanation:"`ssh` connects to remote systems securely."},
+  {q:"Which command transfers files securely?",type:"multiple-choice",a:["sftp"],options:["sftp","scp","ftp","rsync"],explanation:"`sftp` securely transfers files."}
+  {q:"Which command schedules a one-time job at a specific time?",type:"multiple-choice",a:["at"],options:["at","cron","sleep","bg"],explanation:"`at` schedules a job at a specific time."},
+  {q:"Which command runs a job immediately using the at scheduler?",type:"multiple-choice",a:["at now"],options:["at now","cron now","bg","fg"],explanation:"`at now` executes immediately using `at`."},
+  {q:"Which daemon processes at jobs?",type:"multiple-choice",a:["atd"],options:["atd","cron","systemd","rsyslogd"],explanation:"`atd` daemon handles `at` jobs."},
+  {q:"Which command removes a scheduled at job?",type:"multiple-choice",a:["atrm"],options:["atrm","atq","rm","kill"],explanation:"`atrm` removes scheduled `at` jobs."},
+  {q:"Which command lists pending at jobs?",type:"multiple-choice",a:["atq"],options:["atq","atd","cron","jobs"],explanation:"`atq` lists pending `at` jobs."},
+  {q:"Which command is used for pattern scanning and processing?",type:"multiple-choice",a:["awk"],options:["awk","sed","grep","cat"],explanation:"`awk` is for pattern scanning and text processing."},
+  {q:"Which command resumes a suspended job in the background?",type:"multiple-choice",a:["bg"],options:["bg","fg","jobs","kill"],explanation:"`bg` resumes a suspended job in the background."},
+  {q:"Which command decompresses .bz2 files?",type:"multiple-choice",a:["bunzip2"],options:["bunzip2","bzip2","gzip","gunzip"],explanation:"`bunzip2` decompresses `.bz2` files."},
+  {q:"Which command compresses files using the bzip2 algorithm?",type:"multiple-choice",a:["bzip2"],options:["bzip2","bunzip2","gzip","gunzip"],explanation:"`bzip2` compresses files using bzip2."},
+  {q:"Which command displays file contents?",type:"multiple-choice",a:["cat"],options:["cat","less","more","head"],explanation:"`cat` outputs file contents."},
+  {q:"The command `cd` changes the current directory.",type:"true-false",a:["True"],explanation:"`cd` is used to change directories."},
+  {q:"Which command modifies password aging settings?",type:"multiple-choice",a:["chage"],options:["chage","passwd","usermod","chown"],explanation:"`chage` modifies password expiration."},
+  {q:"Which command changes a file’s group ownership?",type:"multiple-choice",a:["chgrp"],options:["chgrp","chown","chmod","grpadd"],explanation:"`chgrp` changes the group ownership."},
+  {q:"Which command changes file permissions?",type:"multiple-choice",a:["chmod"],options:["chmod","chown","chgrp","umask"],explanation:"`chmod` changes permissions."},
+  {q:"Which command changes file ownership?",type:"multiple-choice",a:["chown"],options:["chown","chgrp","chmod","usermod"],explanation:"`chown` changes file ownership."},
+  {q:"The daemon crond runs scheduled cron jobs.",type:"true-false",a:["True"],explanation:"`crond` runs cron jobs as scheduled."},
+  {q:"Which command edits a user’s cron table?",type:"multiple-choice",a:["crontab"],options:["crontab","cronedit","vim /etc/cron","at"],explanation:"`crontab -e` edits cron jobs for a user."},
+  {q:"Which daemon synchronizes system time?",type:"multiple-choice",a:["chronyd"],options:["chronyd","ntpd","systemd","timed"],explanation:"`chronyd` keeps system time synchronized."},
+  {q:"Which command displays or sets the system date/time?",type:"multiple-choice",a:["date"],options:["date","time","timedatectl","clock"],explanation:"`date` shows or sets system date/time."},
+  {q:"Which command shows disk space usage?",type:"multiple-choice",a:["df"],options:["df","du","lsblk","fdisk"],explanation:"`df` shows disk space usage for mounted filesystems."},
+  {q:"Which command queries DNS servers?",type:"multiple-choice",a:["dig"],options:["dig","host","nslookup","ping"],explanation:"`dig` queries DNS records."},
+  {q:"The command `sudo` runs commands as root.",type:"true-false",a:["True"],explanation:"`sudo` executes commands with root privileges."},
+  {q:"Which command lists directory contents?",type:"multiple-choice",a:["ls"],options:["ls","dir","tree","find"],explanation:"`ls` lists files and directories."},
+  {q:"Which command searches text patterns in files?",type:"multiple-choice",a:["grep"],options:["grep","awk","sed","find"],explanation:"`grep` searches text patterns."},
+  {q:"The `top` command shows system resource usage in real time.",type:"true-false",a:["True"],explanation:"`top` displays running processes and resource usage."},
+  {q:"Which command displays the current working directory?",type:"multiple-choice",a:["pwd"],options:["pwd","cd","ls","whoami"],explanation:"`pwd` prints current working directory."},
+  {q:"Which command safely edits sudoers?",type:"multiple-choice",a:["visudo"],options:["visudo","nano /etc/sudoers","sudoedit","vim /etc/sudoers"],explanation:"Always use `visudo` to safely edit sudoers."},
+  {q:"The root directory is represented by `/`.",type:"true-false",a:["True"],explanation:"`/` is the root of the filesystem."},
+  {q:"Which directory contains user home directories?",type:"multiple-choice",a:["/home"],options:["/home","/root","/usr","/var"],explanation:"User homes are stored in `/home`."},
+  {q:"Which directory contains bootloader files?",type:"multiple-choice",a:["/boot"],options:["/boot","/bin","/usr","/etc"],explanation:"`/boot` contains bootloader and kernel files."},
+  {q:"Which directory stores temporary mounts?",type:"multiple-choice",a:["/mnt"],options:["/mnt","/media","/tmp","/var"],explanation:"Temporary mounts often go in `/mnt`."},
+  {q:"Which command prints text to the terminal?",type:"multiple-choice",a:["echo"],options:["echo","print","cat","write"],explanation:"`echo` prints text to terminal."},
+  {q:"Which command decompresses .gz files?",type:"multiple-choice",a:["gunzip"],options:["gunzip","gzip","bunzip2","tar"],explanation:"`gunzip` decompresses `.gz` files."},
+  {q:"Which command compresses files using gzip?",type:"multiple-choice",a:["gzip"],options:["gzip","gunzip","bzip2","tar"],explanation:"`gzip` compresses files."},
+  {q:"Which command shows who is logged in?",type:"multiple-choice",a:["w"],options:["w","who","users","id"],explanation:"`w` shows logged in users."},
+  {q:"Which command creates a new user?",type:"multiple-choice",a:["useradd"],options:["useradd","adduser","usermod","passwd"],explanation:"`useradd` creates a new user account."},
+  {q:"The command `rm -rf /` is safe to run on your system.",type:"true-false",a:["False"],explanation:"Never run `rm -rf /` unless you want to destroy everything. 💀"},
+  {q:"Which command shows system uptime?",type:"multiple-choice",a:["uptime"],options:["uptime","time","top","date"],explanation:"`uptime` shows how long the system has been running."},
+  {q:"Which command shows IP addresses?",type:"multiple-choice",a:["ip addr"],options:["ip addr","ifconfig","ip link","netstat"],explanation:"`ip addr` lists network interfaces and addresses."},
+  {q:"Which command connects to a remote system via SSH?",type:"multiple-choice",a:["ssh"],options:["ssh","telnet","rlogin","scp"],explanation:"`ssh` connects to remote systems securely."},
+  {q:"Which command transfers files securely?",type:"multiple-choice",a:["sftp"],options:["sftp","scp","ftp","rsync"],explanation:"`sftp` securely transfers files."},
+  {q:"Linux meme: Why did the root user cross the road?",type:"true-false",a:["False"],explanation:"Because root never logs out! 😹"}
+  {q:"Which command schedules a one-time job at a specific time?",type:"multiple-choice",a:["at"],options:["at","cron","sleep","bg"],explanation:"`at` schedules a job at a specific time."},
+  {q:"Which command runs a job immediately using the at scheduler?",type:"multiple-choice",a:["at now"],options:["at now","cron now","bg","fg"],explanation:"`at now` executes immediately using `at`."},
+  {q:"Which daemon processes at jobs?",type:"multiple-choice",a:["atd"],options:["atd","cron","systemd","rsyslogd"],explanation:"`atd` daemon handles `at` jobs."},
+  {q:"Which command removes a scheduled at job?",type:"multiple-choice",a:["atrm"],options:["atrm","atq","rm","kill"],explanation:"`atrm` removes scheduled at jobs."},
+  {q:"Which command lists pending at jobs?",type:"multiple-choice",a:["atq"],options:["atq","atd","cron","jobs"],explanation:"`atq` lists pending `at` jobs."},
+  {q:"Which command is used for pattern scanning and processing?",type:"multiple-choice",a:["awk"],options:["awk","sed","grep","cat"],explanation:"`awk` is used for pattern scanning and processing text."},
+  {q:"Which command resumes a suspended job in the background?",type:"multiple-choice",a:["bg"],options:["bg","fg","jobs","kill"],explanation:"`bg` resumes suspended jobs in the background."},
+  {q:"Which command decompresses .bz2 files?",type:"multiple-choice",a:["bunzip2"],options:["bunzip2","bzip2","gzip","gunzip"],explanation:"`bunzip2` decompresses `.bz2` files."},
+  {q:"Which command compresses files using the bzip2 algorithm?",type:"multiple-choice",a:["bzip2"],options:["bzip2","bunzip2","gzip","zip"],explanation:"`bzip2` compresses files with the bzip2 algorithm."},
+  {q:"Which command displays file contents?",type:"multiple-choice",a:["cat"],options:["cat","less","more","head"],explanation:"`cat` displays the contents of a file."},
+  {q:"Which command changes the current directory?",type:"multiple-choice",a:["cd"],options:["cd","pwd","ls","mv"],explanation:"`cd` changes the current directory."},
+  {q:"Which command modifies password aging settings?",type:"multiple-choice",a:["chage"],options:["chage","passwd","usermod","useradd"],explanation:"`chage` modifies password aging settings."},
+  {q:"Which command changes a file’s group ownership?",type:"multiple-choice",a:["chgrp"],options:["chgrp","chmod","chown","grpadd"],explanation:"`chgrp` changes a file’s group ownership."},
+  {q:"Which command changes file permissions?",type:"multiple-choice",a:["chmod"],options:["chmod","chown","chgrp","umask"],explanation:"`chmod` changes file permissions."},
+  {q:"Which command changes file ownership?",type:"multiple-choice",a:["chown"],options:["chown","chmod","chgrp","ls"],explanation:"`chown` changes file ownership."},
+  {q:"Which daemon runs scheduled cron jobs?",type:"multiple-choice",a:["crond"],options:["crond","cron","systemd","atd"],explanation:"`crond` runs cron jobs."},
+  {q:"Which command edits a user’s cron table?",type:"multiple-choice",a:["crontab"],options:["crontab","cronjob","vi","nano"],explanation:"`crontab` edits a user’s cron table."},
+  {q:"Which daemon synchronizes system time?",type:"multiple-choice",a:["chronyd"],options:["chronyd","ntpd","systemd","timed"],explanation:"`chronyd` synchronizes system time."},
+  {q:"Which command displays or sets the system date/time?",type:"multiple-choice",a:["date"],options:["date","timedatectl","time","clock"],explanation:"`date` displays or sets system date/time."},
+  {q:"Which command shows disk space usage?",type:"multiple-choice",a:["df"],options:["df","du","lsblk","fdisk"],explanation:"`df` shows disk space usage."},
+  {q:"Which command queries DNS servers?",type:"multiple-choice",a:["dig"],options:["dig","host","nslookup","ping"],explanation:"`dig` queries DNS servers."},
+  {q:"Which package manager installs software on RHEL-based systems?",type:"multiple-choice",a:["dnf"],options:["dnf","yum","apt","rpm"],explanation:"`dnf` installs software on RHEL-based systems."},
+  {q:"Which command manages DNF configuration?",type:"multiple-choice",a:["dnf config-manager"],options:["dnf config-manager","dnf update","dnf list","dnf info"],explanation:"`dnf config-manager` manages DNF configuration."},
+  {q:"Which command lists available DNF groups?",type:"multiple-choice",a:["dnf group"],options:["dnf group","dnf info","dnf list","dnf module list"],explanation:"`dnf group` lists available DNF groups."},
+  {q:"Which command shows information about a DNF group?",type:"multiple-choice",a:["dnf group info"],options:["dnf group info","dnf group","dnf list","dnf info"],explanation:"`dnf group info` shows information about a DNF group."},
+  {q:"Which command installs a DNF group?",type:"multiple-choice",a:["dnf group install"],options:["dnf group install","dnf install","dnf group","dnf list"],explanation:"`dnf group install` installs a DNF group."},
+  {q:"Which command lists all DNF groups?",type:"multiple-choice",a:["dnf group list"],options:["dnf group list","dnf group","dnf list","dnf info"],explanation:"`dnf group list` lists all DNF groups."},
+  {q:"Which command lists hidden DNF groups?",type:"multiple-choice",a:["dnf group list hidden"],options:["dnf group list hidden","dnf group list","dnf list","dnf info"],explanation:"`dnf group list hidden` lists hidden groups."},
+  {q:"Which command shows package information?",type:"multiple-choice",a:["dnf info"],options:["dnf info","dnf list","dnf search","rpm -qi"],explanation:"`dnf info` shows package information."},
+  {q:"Which command installs a package?",type:"multiple-choice",a:["dnf install"],options:["dnf install","dnf update","rpm -i","yum install"],explanation:"`dnf install` installs a package."},
+  {q:"Which command lists installed and available packages?",type:"multiple-choice",a:["dnf list"],options:["dnf list","dnf info","rpm -qa","yum list"],explanation:"`dnf list` lists installed and available packages."},
+  {q:"Which command lists kernel packages?",type:"multiple-choice",a:["dnf list kernel"],options:["dnf list kernel","dnf list","rpm -qa | grep kernel","uname -r"],explanation:"`dnf list kernel` shows kernel packages."},
+  {q:"Which command shows module information?",type:"multiple-choice",a:["dnf module info"],options:["dnf module info","dnf module list","dnf info","dnf list"],explanation:"`dnf module info` shows module information."},
+  {q:"Which command lists DNF modules?",type:"multiple-choice",a:["dnf module list"],options:["dnf module list","dnf module info","dnf list","dnf info"],explanation:"`dnf module list` lists modules."},
+  {q:"Which command shows which module provides a feature?",type:"multiple-choice",a:["dnf module provides"],options:["dnf module provides","dnf info","dnf list","dnf search"],explanation:"`dnf module provides` shows module features."},
+  {q:"Which command shows which package provides a file?",type:"multiple-choice",a:["dnf provides"],options:["dnf provides","dnf search","rpm -qf","dnf info"],explanation:"`dnf provides` shows which package provides a file."},
+  {q:"Which command removes a package?",type:"multiple-choice",a:["dnf remove"],options:["dnf remove","dnf uninstall","rpm -e","yum remove"],explanation:"`dnf remove` removes a package."},
+  {q:"Which command lists enabled repositories?",type:"multiple-choice",a:["dnf repolist"],options:["dnf repolist","dnf repolist all","dnf list","yum repolist"],explanation:"`dnf repolist` lists enabled repos."},
+  {q:"Which command lists all repositories?",type:"multiple-choice",a:["dnf repolist all"],options:["dnf repolist all","dnf repolist","dnf list","yum repolist all"],explanation:"`dnf repolist all` lists all repositories."},
+  {q:"Which command searches for packages?",type:"multiple-choice",a:["dnf search"],options:["dnf search","dnf list","dnf provides","rpm -qa"],explanation:"`dnf search` searches for packages."},
+  {q:"Which command searches all package metadata?",type:"multiple-choice",a:["dnf search all"],options:["dnf search all","dnf search","dnf info","dnf list"],explanation:"`dnf search all` searches all metadata."},
+  {q:"Which command updates all packages?",type:"multiple-choice",a:["dnf update"],options:["dnf update","dnf upgrade","dnf install","rpm -Uvh"],explanation:"`dnf update` updates packages."},
+  {q:"Which command shows disk usage of files and directories?",type:"multiple-choice",a:["du"],options:["du","df","ls","lsblk"],explanation:"`du` shows disk usage of files/directories."},
+  {q:"Which command prints text to the terminal?",type:"multiple-choice",a:["echo"],options:["echo","printf","cat","write"],explanation:"`echo` prints text to the terminal."},
+  {q:"Which command brings a background job to the foreground?",type:"multiple-choice",a:["fg"],options:["fg","bg","jobs","kill"],explanation:"`fg` brings a background job to the foreground."},
+  {q:"Which command searches for files?",type:"multiple-choice",a:["find"],options:["find","locate","grep","whereis"],explanation:"`find` searches for files."},
+  {q:"Which command searches text patterns in files?",type:"multiple-choice",a:["grep"],options:["grep","awk","sed","find"],explanation:"`grep` searches text patterns."},
+  {q:"Which command creates a new group?",type:"multiple-choice",a:["groupadd"],options:["groupadd","groupmod","groupdel","addgroup"],explanation:"`groupadd` creates a new group."},
+  {q:"Which command modifies an existing group?",type:"multiple-choice",a:["groupmod"],options:["groupmod","groupadd","groupdel","usermod"],explanation:"`groupmod` modifies an existing group."},
+  {q:"Which command deletes a group?",type:"multiple-choice",a:["groupdel"],options:["groupdel","groupmod","groupadd","delgroup"],explanation:"`groupdel` deletes a group."},
+  {q:"Which command decompresses .gz files?",type:"multiple-choice",a:["gunzip"],options:["gunzip","gzip","bunzip2","zcat"],explanation:"`gunzip` decompresses .gz files."},
+  {q:"Which command compresses files using gzip?",type:"multiple-choice",a:["gzip"],options:["gzip","gunzip","bzip2","zip"],explanation:"`gzip` compresses files with gzip."},
+  {q:"Which command performs DNS lookups?",type:"multiple-choice",a:["host"],options:["host","dig","nslookup","ping"],explanation:"`host` performs DNS lookups."},
+  {q:"Which command displays or sets the system hostname?",type:"multiple-choice",a:["hostname"],options:["hostname","hostnamectl","dnsdomainname","uname -n"],explanation:"`hostname` shows or sets the system hostname."},
+  {q:"Which command manages hostname settings?",type:"multiple-choice",a:["hostnamectl"],options:["hostnamectl","hostname","nmcli","systemctl"],explanation:"`hostnamectl` manages hostname settings."},
+  {q:"Which command sets the system hostname?",type:"multiple-choice",a:["hostnamectl hostname"],options:["hostnamectl hostname","hostname","hostnamectl set-hostname","nmcli general hostname"],explanation:"`hostnamectl hostname` sets the system hostname."},
+  {q:"Which command shows hostname status?",type:"multiple-choice",a:["hostnamectl status"],options:["hostnamectl status","hostname","hostnamectl","nmcli general status"],explanation:"`hostnamectl status` shows hostname status."},
+  {q:"Which command shows user identity information?",type:"multiple-choice",a:["id"],options:["id","whoami","groups","finger"],explanation:"`id` shows user identity info."},
+  {q:"Which command displays documentation in info format?",type:"multiple-choice",a:["info"],options:["info","man","help","whatis"],explanation:"`info` displays documentation in info format."},
+  {q:"Which command shows network interfaces and addresses?",type:"multiple-choice",a:["ip"],options:["ip","ifconfig","nmcli","netstat"],explanation:"`ip` shows network interfaces and addresses."},
+  {q:"Which command shows IP addresses?",type:"multiple-choice",a:["ip addr"],options:["ip addr","ifconfig","ip link","ip route"],explanation:"`ip addr` shows IP addresses."},
+  {q:"Which command displays IP address information?",type:"multiple-choice",a:["ip addr show"],options:["ip addr show","ip addr","ifconfig","ip route"],explanation:"`ip addr show` displays IP information."},
+  {q:"Which command shows network links?",type:"multiple-choice",a:["ip link"],options:["ip link","ip addr","ifconfig","nmcli"],explanation:"`ip link` shows network links."},
+  {q:"Which command displays routing table information?",type:"multiple-choice",a:["ip route"],options:["ip route","route","netstat -r","ip link"],explanation:"`ip route` displays routing table."},
+  {q:"Which command lists background jobs?",type:"multiple-choice",a:["jobs"],options:["jobs","ps","fg","bg"],explanation:"`jobs` lists background jobs."},
+  {q:"Which command views system logs?",type:"multiple-choice",a:["journalctl"],options:["journalctl","dmesg","cat /var/log/messages","less"],explanation:"`journalctl` views system logs."},
+  {q:"Which command sends a signal to a process?",type:"multiple-choice",a:["kill"],options:["kill","killall","pkill","signal"],explanation:"`kill` sends a signal to a process."},
+  {q:"Which command kills processes by name?",type:"multiple-choice",a:["killall"],options:["killall","pkill","kill","ps"],explanation:"`killall` kills processes by name."},
+  {q:"Which command views file contents one page at a time?",type:"multiple-choice",a:["less"],options:["less","more","cat","head"],explanation:"`less` allows paging through file contents."},
+  {q:"Which command searches a file database?",type:"multiple-choice",a:["locate"],options:["locate","find","grep","updatedb"],explanation:"`locate` searches the file database."},
+  {q:"Which command writes messages to the system log?",type:"multiple-choice",a:["logger"],options:["logger","echo","write","syslog"],explanation:"`logger` writes messages to the system log."},
+  {q:"Which command rotates log files?",type:"multiple-choice",a:["logrotate"],options:["logrotate","rsyslogd","journalctl","systemd"],explanation:"`logrotate` rotates log files."},
+  {q:"Which command lists directory contents?",type:"multiple-choice",a:["ls"],options:["ls","dir","tree","find"],explanation:"`ls` lists directory contents."},
+  {q:"Which command displays CPU information?",type:"multiple-choice",a:["lscpu"],options:["lscpu","cat /proc/cpuinfo","top","htop"],explanation:"`lscpu` displays CPU info."},
+  {q:"Which command displays manual pages?",type:"multiple-choice",a:["man"],options:["man","info","help","apropos"],explanation:"`man` displays manual pages."},
+  {q:"Which command creates a directory?",type:"multiple-choice",a:["mkdir"],options:["mkdir","rmdir","touch","cp -r"],explanation:"`mkdir` creates directories."},
+  {q:"Which command mounts a filesystem?",type:"multiple-choice",a:["mount"],options:["mount","umount","lsblk","df"],explanation:"`mount` mounts a filesystem."},
+  {q:"Which command changes a user’s password?",type:"multiple-choice",a:["passwd"],options:["passwd","chage","usermod","sudo"],explanation:"`passwd` changes a user's password."},
+  {q:"Which command searches for processes by name?",type:"multiple-choice",a:["pgrep"],options:["pgrep","ps","top","pidof"],explanation:"`pgrep` searches processes by name."},
+  {q:"Which command tests network connectivity?",type:"multiple-choice",a:["ping"],options:["ping","traceroute","telnet","nc"],explanation:"`ping` tests network connectivity."},
+  {q:"Which command kills processes by pattern?",type:"multiple-choice",a:["pkill"],options:["pkill","kill","killall","xkill"],explanation:"`pkill` kills processes by pattern."},
+  {q:"Which command lists running processes?",type:"multiple-choice",a:["ps"],options:["ps","top","jobs","htop"],explanation:"`ps` lists running processes."},
+  {q:"Which command shows all processes?",type:"multiple-choice",a:["ps aux"],options:["ps aux","ps -ef","top","htop"],explanation:"`ps aux` shows all processes."},
+  {q:"Which command prints the current working directory?",type:"multiple-choice",a:["pwd"],options:["pwd","cd","ls","echo $PWD"],explanation:"`pwd` prints current directory."},
+  {q:"Which command removes an empty directory?",type:"multiple-choice",a:["rmdir"],options:["rmdir","rm -r","rm","del"],explanation:"`rmdir` removes empty directories."},
+  {q:"Which command manages RPM packages?",type:"multiple-choice",a:["rpm"],options:["rpm","dnf","yum","apt"],explanation:"`rpm` manages RPM packages."},
+  {q:"Which command synchronizes files and directories?",type:"multiple-choice",a:["rsync"],options:["rsync","cp","scp","mv"],explanation:"`rsync` synchronizes files and directories."},
+  {q:"Which daemon handles system logging?",type:"multiple-choice",a:["rsyslogd"],options:["rsyslogd","systemd-journald","syslogd","journalctl"],explanation:"`rsyslogd` handles system logging."},
+  {q:"Which command prints sequences of numbers?",type:"multiple-choice",a:["seq"],options:["seq","echo","printf","yes"],explanation:"`seq` prints sequences of numbers."},
+  {q:"Which command transfers files securely?",type:"multiple-choice",a:["sftp"],options:["sftp","scp","ftp","rsync"],explanation:"`sftp` transfers files securely."},
+  {q:"Which command pauses execution for a number of seconds?",type:"multiple-choice",a:["sleep"],options:["sleep","wait","pause","read"],explanation:"`sleep` pauses execution."},
+  {q:"Which command sorts text?",type:"multiple-choice",a:["sort"],options:["sort","uniq","awk","grep"],explanation:"`sort` sorts text."},
+  {q:"Which command shows socket statistics?",type:"multiple-choice",a:["ss"],options:["ss","netstat","lsof","ifconfig"],explanation:"`ss` shows socket stats."},
+  {q:"Which command connects to a remote system via SSH?",type:"multiple-choice",a:["ssh"],options:["ssh","telnet","rlogin","sftp"],explanation:"`ssh` connects to remote system."},
+  {q:"Which daemon handles SSH connections?",type:"multiple-choice",a:["sshd"],options:["sshd","ssh","systemd","xinetd"],explanation:"`sshd` handles SSH connections."},
+  {q:"Which command switches users?",type:"multiple-choice",a:["su"],options:["su","sudo","login","ssh"],explanation:"`su` switches users."},
+  {q:"Which command runs commands as root?",type:"multiple-choice",a:["sudo"],options:["sudo","su","doas","login"],explanation:"`sudo` runs commands as root."},
+  {q:"Which command manages systemd services?",type:"multiple-choice",a:["systemctl"],options:["systemctl","service","init","rc"],explanation:"`systemctl` manages systemd services."},
+  {q:"Which command shows the unit file of a service?",type:"multiple-choice",a:["systemctl cat"],options:["systemctl cat","systemctl status","systemctl list-unit-files","systemctl show"],explanation:"`systemctl cat` shows the unit file of a service."},
+  {q:"Which command reloads systemd manager configuration?",type:"multiple-choice",a:["systemctl daemon-reload"],options:["systemctl daemon-reload","systemctl restart","systemctl reload","systemctl reset"],explanation:"`systemctl daemon-reload` reloads systemd manager config."},
+  {q:"Which command disables a service?",type:"multiple-choice",a:["systemctl disable"],options:["systemctl disable","systemctl stop","systemctl mask","systemctl block"],explanation:"`systemctl disable` disables a service."},
+  {q:"Which command enables a service?",type:"multiple-choice",a:["systemctl enable"],options:["systemctl enable","systemctl start","systemctl unmask","systemctl activate"],explanation:"`systemctl enable` enables a service."},
+  {q:"Which command checks if a service is active?",type:"multiple-choice",a:["systemctl is-active"],options:["systemctl is-active","systemctl status","systemctl list-units","systemctl check"],explanation:"`systemctl is-active` checks if a service is active."},
+  {q:"Which command checks if a service is enabled?",type:"multiple-choice",a:["systemctl is-enabled"],options:["systemctl is-enabled","systemctl status","systemctl list-unit-files","systemctl check"],explanation:"`systemctl is-enabled` checks if a service is enabled."},
+  {q:"Which command checks if a service has failed?",type:"multiple-choice",a:["systemctl is-failed"],options:["systemctl is-failed","systemctl status","systemctl list-units","systemctl check"],explanation:"`systemctl is-failed` checks service failure."},
+  {q:"Which command lists service dependencies?",type:"multiple-choice",a:["systemctl list-dependencies"],options:["systemctl list-dependencies","systemctl show","systemctl status","systemctl list-units"],explanation:"`systemctl list-dependencies` lists service dependencies."},
+  {q:"Which command lists active units?",type:"multiple-choice",a:["systemctl list-units"],options:["systemctl list-units","systemctl list-unit-files","systemctl status","systemctl list-services"],explanation:"`systemctl list-units` lists active units."},
+  {q:"Which command lists installed unit files?",type:"multiple-choice",a:["systemctl list-unit-files"],options:["systemctl list-unit-files","systemctl list-units","systemctl status","systemctl list-services"],explanation:"`systemctl list-unit-files` lists installed unit files."},
+  {q:"Which command masks a service?",type:"multiple-choice",a:["systemctl mask"],options:["systemctl mask","systemctl disable","systemctl stop","systemctl block"],explanation:"`systemctl mask` masks a service."},
+  {q:"Which command reloads a service?",type:"multiple-choice",a:["systemctl reload"],options:["systemctl reload","systemctl restart","systemctl refresh","systemctl resume"],explanation:"`systemctl reload` reloads a service."},
+  {q:"Which command reloads or restarts a service?",type:"multiple-choice",a:["systemctl reload-or-restart"],options:["systemctl reload-or-restart","systemctl restart","systemctl reload","systemctl reset"],explanation:"`systemctl reload-or-restart` reloads or restarts a service."},
+  {q:"Which command restarts a service?",type:"multiple-choice",a:["systemctl restart"],options:["systemctl restart","systemctl reload","systemctl stop","systemctl reset"],explanation:"`systemctl restart` restarts a service."},
+  {q:"Which command starts a service?",type:"multiple-choice",a:["systemctl start"],options:["systemctl start","systemctl enable","systemctl restart","systemctl activate"],explanation:"`systemctl start` starts a service."},
+  {q:"Which command shows service status?",type:"multiple-choice",a:["systemctl status"],options:["systemctl status","systemctl is-active","systemctl list-units","systemctl list-services"],explanation:"`systemctl status` shows the status of a service."},
+  {q:"Which command stops a service?",type:"multiple-choice",a:["systemctl stop"],options:["systemctl stop","systemctl disable","systemctl kill","systemctl pause"],explanation:"`systemctl stop` stops a service."},
+  {q:"Which command unmasks a service?",type:"multiple-choice",a:["systemctl unmask"],options:["systemctl unmask","systemctl enable","systemctl start","systemctl reload"],explanation:"`systemctl unmask` unmasks a service."},
+  {q:"Which init system manages services and boot processes?",type:"multiple-choice",a:["systemd"],options:["systemd","sysvinit","upstart","init"],explanation:"`systemd` manages services and boot processes."},
+  {q:"Which daemon collects system logs for systemd?",type:"multiple-choice",a:["systemd-journald"],options:["systemd-journald","rsyslogd","syslogd","journalctl"],explanation:"`systemd-journald` collects logs for systemd."},
+  {q:"Which command shows the end of a file?",type:"multiple-choice",a:["tail"],options:["tail","head","less","cat"],explanation:"`tail` shows the end of a file."},
+  {q:"Which command archives files?",type:"multiple-choice",a:["tar"],options:["tar","zip","gzip","bzip2"],explanation:"`tar` archives files."},
+  {q:"Which command shows system resource usage?",type:"multiple-choice",a:["top"],options:["top","htop","ps","vmstat"],explanation:"`top` shows system resources."},
+  {q:"Which command creates an empty file or updates timestamps?",type:"multiple-choice",a:["touch"],options:["touch","echo","cat","printf"],explanation:"`touch` creates empty files or updates timestamps."},
+  {q:"Which command traces the path to a network host?",type:"multiple-choice",a:["tracepath"],options:["tracepath","traceroute","ping","mtr"],explanation:"`tracepath` traces the path to a network host."},
+  {q:"Which command traces network hops?",type:"multiple-choice",a:["traceroute"],options:["traceroute","tracepath","ping","mtr"],explanation:"`traceroute` traces network hops."},
+  {q:"Which command sets default file permissions?",type:"multiple-choice",a:["umask"],options:["umask","chmod","chown","setfacl"],explanation:"`umask` sets default file permissions."},
+  {q:"Which command unmounts a filesystem?",type:"multiple-choice",a:["umount"],options:["umount","mount","diskutil","fusermount"],explanation:"`umount` unmounts a filesystem."},
+  {q:"Which file runs when a user logs out of bash?",type:"multiple-choice",a:["~/.bash-logout"],options:["~/.bash-logout","~/.bash_profile","~/.bashrc","/etc/profile"],explanation:"`~/.bash-logout` runs when a user logs out."},
+  {q:"Which file runs at login before the shell starts?",type:"multiple-choice",a:["~/.bash_profile"],options:["~/.bash_profile","~/.bashrc","/etc/profile","~/.bash_login"],explanation:"`~/.bash_profile` runs at login before the shell starts."},
+  {q:"Which file contains user-specific bash settings?",type:"multiple-choice",a:["~/.bashrc"],options:["~/.bashrc","~/.bash_profile","/etc/bashrc","~/.bash_logout"],explanation:"`~/.bashrc` contains user-specific bash settings."},
+  {q:"Which directory stores user scripts?",type:"multiple-choice",a:["~/bin/"],options:["~/bin/","~/scripts/","/usr/local/bin/","/opt/bin/"],explanation:"`~/bin/` is a common place for user scripts."},
+  {q:"What is the root directory?",type:"multiple-choice",a:["/"],options:["/","/root","/home","/usr"],explanation:"`/` is the root directory."},
+  {q:"Which directory contains essential binaries?",type:"multiple-choice",a:["/bin"],options:["/bin","/usr/bin","/sbin","/lib"],explanation:"`/bin` contains essential binaries."},
+  {q:"Which file is the bash shell executable?",type:"multiple-choice",a:["/bin/bash"],options:["/bin/bash","/usr/bin/bash","/sbin/bash","/bin/sh"],explanation:"`/bin/bash` is the bash shell executable."},
+  {q:"Which directory contains bootloader files?",type:"multiple-choice",a:["/boot"],options:["/boot","/lib","/bin","/etc"],explanation:"`/boot` contains bootloader files."},
+  {q:"Which directory contains device files?",type:"multiple-choice",a:["/dev"],options:["/dev","/proc","/sys","/mnt"],explanation:"`/dev` contains device files."},
+  {q:"Which file represents the system console?",type:"multiple-choice",a:["/dev/console"],options:["/dev/console","/dev/tty","/dev/null","/dev/pts/0"],explanation:"`/dev/console` is the system console."},
+  {q:"Which device represents NVMe drive 0?",type:"multiple-choice",a:["/dev/nvme0"],options:["/dev/nvme0","/dev/nvme1","/dev/sda","/dev/sdb"],explanation:"`/dev/nvme0` is NVMe drive 0."},
+  {q:"Which device represents NVMe drive 1?",type:"multiple-choice",a:["/dev/nvme1"],options:["/dev/nvme1","/dev/nvme0","/dev/sda","/dev/sdb"],explanation:"`/dev/nvme1` is NVMe drive 1."},
+  {q:"Which partition is NVMe1 partition 3?",type:"multiple-choice",a:["/dev/nvme1n1p3"],options:["/dev/nvme1n1p3","/dev/nvme0n1p3","/dev/sda3","/dev/sdb3"],explanation:"`/dev/nvme1n1p3` is NVMe1 partition 3."},
+  {q:"Which file discards all output written to it?",type:"multiple-choice",a:["/dev/null"],options:["/dev/null","/dev/zero","/dev/random","/dev/console"],explanation:"`/dev/null` discards all output."},
+  {q:"Which device is NVMe0 partition 1?",type:"multiple-choice",a:["/dev/nvme0n1p1"],options:["/dev/nvme0n1p1","/dev/nvme0n1p2","/dev/sda1","/dev/sdb1"],explanation:"`/dev/nvme0n1p1` is NVMe0 partition 1."},
+  {q:"Which device is SATA drive A?",type:"multiple-choice",a:["/dev/sda"],options:["/dev/sda","/dev/sdb","/dev/nvme0","/dev/nvme1"],explanation:"`/dev/sda` is SATA drive A."},
+  {q:"Which device is SATA drive A partition 1?",type:"multiple-choice",a:["/dev/sda1"],options:["/dev/sda1","/dev/sda2","/dev/sdb1","/dev/nvme0n1p1"],explanation:"`/dev/sda1` is SATA drive A partition 1."},
+  {q:"Which device is SATA drive B?",type:"multiple-choice",a:["/dev/sdb"],options:["/dev/sdb","/dev/sda","/dev/nvme1","/dev/nvme0"],explanation:"`/dev/sdb` is SATA drive B."},
+  {q:"Which directory stores shared memory?",type:"multiple-choice",a:["/dev/shm"],options:["/dev/shm","/run/shm","/tmp","/var/tmp"],explanation:"`/dev/shm` stores shared memory."},
+  {q:"Which directory contains system configuration files?",type:"multiple-choice",a:["/etc"],options:["/etc","/usr/etc","/var/etc","/home/etc"],explanation:"`/etc` contains system configuration files."},
+  {q:"Which directory stores NetworkManager connections?",type:"multiple-choice",a:["/etc/NetworkManager/system-connections/"],options:["/etc/NetworkManager/system-connections/","/var/NetworkManager/","/etc/network/","/run/NetworkManager/"],explanation:"NetworkManager stores connections here."},
+  {q:"Which file configures anacron?",type:"multiple-choice",a:["/etc/anacrontab"],options:["/etc/anacrontab","/etc/crontab","/etc/cron.d/anacron","/etc/cron.daily/anacron"],explanation:"`/etc/anacrontab` configures anacron."},
+  {q:"Which file contains global bash settings?",type:"multiple-choice",a:["/etc/bashrc"],options:["/etc/bashrc","/etc/profile","/etc/bash_profile","/etc/environment"],explanation:"`/etc/bashrc` contains global bash settings."},
+  {q:"Which directory contains cron job definitions?",type:"multiple-choice",a:["/etc/cron.d/"],options:["/etc/cron.d/","/etc/cron.daily/","/var/spool/cron/","/etc/crontab"],explanation:"`/etc/cron.d/` contains cron job definitions."},
+  {q:"Which file lists mounted filesystems?",type:"multiple-choice",a:["/etc/fstab"],options:["/etc/fstab","/etc/mtab","/proc/mounts","/etc/mtab.conf"],explanation:"`/etc/fstab` lists mounted filesystems."},
+  {q:"Which file stores the system hostname?",type:"multiple-choice",a:["/etc/hostname"],options:["/etc/hostname","/etc/hosts","/etc/sysconfig/network","/etc/resolv.conf"],explanation:"`/etc/hostname` stores the hostname."},
+  {q:"Which file maps hostnames to IP addresses?",type:"multiple-choice",a:["/etc/hosts"],options:["/etc/hosts","/etc/resolv.conf","/etc/hostname","/etc/network/interfaces"],explanation:"`/etc/hosts` maps hostnames to IPs."},
+  {q:"Which file stores group information?",type:"multiple-choice",a:["/etc/group"],options:["/etc/group","/etc/passwd","/etc/shadow","/etc/login.defs"],explanation:"`/etc/group` stores group info."},
+  {q:"Which file stores login defaults?",type:"multiple-choice",a:["/etc/login.defs"],options:["/etc/login.defs","/etc/passwd","/etc/shadow","/etc/profile"],explanation:"`/etc/login.defs` stores login defaults."},
+  {q:"Which file stores user account information?",type:"multiple-choice",a:["/etc/passwd"],options:["/etc/passwd","/etc/group","/etc/shadow","/etc/login.defs"],explanation:"`/etc/passwd` stores user accounts."},
+  {q:"Which file sets system-wide umask?",type:"multiple-choice",a:["/etc/profile.d/local-umask.sh"],options:["/etc/profile.d/local-umask.sh","/etc/profile","/etc/bashrc","/etc/login.defs"],explanation:"This file sets system-wide umask."},
+  {q:"Which file stores DNS resolver settings?",type:"multiple-choice",a:["/etc/resolv.conf"],options:["/etc/resolv.conf","/etc/hosts","/etc/network/interfaces","/etc/nsswitch.conf"],explanation:"`/etc/resolv.conf` stores DNS resolver settings."},
+  {q:"Which file configures rsyslog?",type:"multiple-choice",a:["/etc/rsyslog.conf"],options:["/etc/rsyslog.conf","/etc/syslog.conf","/etc/journal.conf","/etc/logrotate.conf"],explanation:"`/etc/rsyslog.conf` configures rsyslog."},
+  {q:"Which directory stores rsyslog configuration snippets?",type:"multiple-choice",a:["/etc/rsyslog.d"],options:["/etc/rsyslog.d","/etc/rsyslog.conf","/etc/syslog.d","/etc/journal.d"],explanation:"`/etc/rsyslog.d` stores snippets."},
+  {q:"Which file lists network services and ports?",type:"multiple-choice",a:["/etc/services"],options:["/etc/services","/etc/ports","/etc/network/services","/etc/protocols"],explanation:"`/etc/services` lists network services."},
+  {q:"Which file stores encrypted passwords?",type:"multiple-choice",a:["/etc/shadow"],options:["/etc/shadow","/etc/passwd","/etc/group","/etc/login.defs"],explanation:"`/etc/shadow` stores encrypted passwords."},
+  {q:"Which file configures SSH client settings?",type:"multiple-choice",a:["/etc/ssh/ssh_config"],options:["/etc/ssh/ssh_config","/etc/ssh/sshd_config","/etc/ssh/config","/etc/ssh/known_hosts"],explanation:"`/etc/ssh/ssh_config` configures SSH client."},
+  {q:"Which file configures sudo permissions?",type:"multiple-choice",a:["/etc/sudoers"],options:["/etc/sudoers","/etc/sudoers.d/","/etc/group","/etc/passwd"],explanation:"`/etc/sudoers` configures sudo permissions."},
+  {q:"Which directory stores sudoers fragments?",type:"multiple-choice",a:["/etc/sudoers.d"],options:["/etc/sudoers.d","/etc/sudoers","/etc/sudoers.conf","/etc/sudo"],explanation:"`/etc/sudoers.d` stores sudoers fragments."},
+  {q:"Linux meme: Why do programmers always mix up Halloween and Christmas?",type:"true-false",a:["true"],explanation:"Because Oct 31 == Dec 25 😉"},
+  {q:"Linux meme: I would tell you a UDP joke, but...",type:"true-false",a:["true"],explanation:"...you might not get it 😂"},
+  {q:"Disclaimer: This quiz is AI-generated and may contain errors. The creator is not responsible for wrong answers. Enjoy learning!",type:"info",a:[],explanation:"Fun cover-page disclaimer. Remember, even AI can be wrong sometimes 😎"}
 ];
 
 // ===================== QUIZ LOGIC =====================
@@ -160,15 +336,11 @@ let selectedQuestions = [];
 let currentQuestionIndex = 0;
 let answersLog = [];
 
-function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
-}
+function shuffleArray(array){return array.sort(()=>Math.random()-0.5);}
 
-document.getElementById("start-btn").addEventListener("click", () => {
-    document.getElementById("cover").style.display = "none";
-    document.getElementById("quiz").style.display = "block";
-
-    // Pick 50 random questions
+document.getElementById("start-btn").addEventListener("click", ()=>{
+    document.getElementById("cover").style.display="none";
+    document.getElementById("quiz").style.display="block";
     selectedQuestions = shuffleArray([...questionPool]).slice(0,50);
     showQuestion();
 });
@@ -181,116 +353,64 @@ const progressEl = document.getElementById("progress");
 const resultsEl = document.getElementById("results");
 const memeEl = document.getElementById("meme");
 
-function showQuestion() {
-    if (currentQuestionIndex >= selectedQuestions.length) {
-        showResults();
-        return;
-    }
-
+function showQuestion(){
+    if(currentQuestionIndex>=selectedQuestions.length){showResults();return;}
     const qObj = selectedQuestions[currentQuestionIndex];
-    progressEl.textContent = `Question ${currentQuestionIndex + 1} of ${selectedQuestions.length}`;
-    questionEl.textContent = qObj.q;
-    feedbackEl.textContent = "";
-    memeEl.textContent = "";
-    nextBtn.style.display = "none";
-    answersEl.innerHTML = "";
-
-    if (qObj.type === "multiple-choice" || qObj.type === "true-false") {
-        let options = qObj.type==="true-false" ? ["True","False"] : shuffleArray(qObj.options);
-        options.forEach(opt => {
-            const btn = document.createElement("button");
-            btn.textContent = opt;
-            btn.addEventListener("click", () => selectAnswer(opt));
+    progressEl.textContent=`Question ${currentQuestionIndex+1} of ${selectedQuestions.length}`;
+    questionEl.textContent=qObj.q;
+    feedbackEl.textContent="";
+    memeEl.textContent="";
+    nextBtn.style.display="none";
+    answersEl.innerHTML="";
+    
+    if(qObj.type==="multiple-choice"||qObj.type==="true-false"){
+        let options=qObj.type==="true-false"?["True","False"]:shuffleArray(qObj.options);
+        options.forEach(opt=>{
+            const btn=document.createElement("button");
+            btn.textContent=opt;
+            btn.addEventListener("click",()=>selectAnswer(opt));
             answersEl.appendChild(btn);
         });
-    } else if (qObj.type === "fill-in") {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Type your answer here";
-        answersEl.appendChild(input);
-        const submitBtn = document.createElement("button");
-        submitBtn.textContent = "Submit";
-        submitBtn.addEventListener("click", () => selectAnswer(input.value));
-        answersEl.appendChild(submitBtn);
-    } else if (qObj.type === "select-all") {
-        qObj.options.forEach(opt => {
-            const cb = document.createElement("input");
-            cb.type = "checkbox";
-            cb.value = opt;
-            cb.id = "cb"+opt;
-            const label = document.createElement("label");
-            label.htmlFor = "cb"+opt;
-            label.textContent = opt;
-            answersEl.appendChild(cb);
-            answersEl.appendChild(label);
-            answersEl.appendChild(document.createElement("br"));
+    } else if(qObj.type==="fill-in"){
+        const input=document.createElement("input"); input.type="text"; input.placeholder="Type your answer here"; answersEl.appendChild(input);
+        const submitBtn=document.createElement("button"); submitBtn.textContent="Submit"; submitBtn.addEventListener("click",()=>selectAnswer(input.value)); answersEl.appendChild(submitBtn);
+    } else if(qObj.type==="select-all"){
+        qObj.options.forEach(opt=>{
+            const cb=document.createElement("input"); cb.type="checkbox"; cb.value=opt; cb.id="cb"+opt;
+            const label=document.createElement("label"); label.htmlFor="cb"+opt; label.textContent=opt;
+            answersEl.appendChild(cb); answersEl.appendChild(label); answersEl.appendChild(document.createElement("br"));
         });
-        const submitBtn = document.createElement("button");
-        submitBtn.textContent = "Submit";
-        submitBtn.addEventListener("click", () => {
-            const selected = Array.from(answersEl.querySelectorAll("input[type=checkbox]"))
-                .filter(cb => cb.checked)
-                .map(cb => cb.value);
+        const submitBtn=document.createElement("button"); submitBtn.textContent="Submit";
+        submitBtn.addEventListener("click",()=>{
+            const selected=Array.from(answersEl.querySelectorAll("input[type=checkbox]")).filter(cb=>cb.checked).map(cb=>cb.value);
             selectAnswer(selected);
         });
         answersEl.appendChild(submitBtn);
     }
 }
 
-function selectAnswer(answer) {
+function selectAnswer(answer){
     const qObj = selectedQuestions[currentQuestionIndex];
-    let isCorrect = false;
-
-    if (Array.isArray(answer)) {
-        // select-all
-        isCorrect = JSON.stringify(answer.sort()) === JSON.stringify(qObj.a.sort());
-    } else {
-        isCorrect = qObj.a.some(a => a.toLowerCase() === answer.toLowerCase());
-    }
-
-    feedbackEl.innerHTML = isCorrect
-        ? `<span style="color:#0a0">Correct!</span> ${qObj.explanation}`
-        : `<span style="color:#a00">Wrong.</span> Correct answer: ${qObj.a.join(", ")}. ${qObj.explanation}`;
-
-    // Add meme sometimes
-    if (Math.random() < 0.2) memeEl.textContent = ["¯\\_(ツ)_/¯","Did you really just do that? 😹","Linux hates you now 😈"][Math.floor(Math.random()*3)];
-
-    answersLog.push({
-        question: qObj.q,
-        yourAnswer: Array.isArray(answer)?answer.join(", "):answer,
-        correctAnswer: qObj.a.join(", "),
-        correct: isCorrect
-    });
-
-    Array.from(answersEl.querySelectorAll("button,input")).forEach(el => el.disabled = true);
-
-    nextBtn.style.display = "inline-block";
+    let isCorrect=false;
+    if(Array.isArray(answer)) isCorrect=JSON.stringify(answer.sort())===JSON.stringify(qObj.a.sort());
+    else isCorrect=qObj.a.some(a=>a.toLowerCase()===answer.toLowerCase());
+    feedbackEl.innerHTML=isCorrect?`<span style="color:#0a0">Correct!</span> ${qObj.explanation}`:`<span style="color:#a00">Wrong.</span> Correct answer: ${qObj.a.join(", ")}. ${qObj.explanation}`;
+    if(Math.random()<0.2)memeEl.textContent=["¯\\_(ツ)_/¯","Did you really just do that? 😹","Linux hates you now 😈"][Math.floor(Math.random()*3)];
+    answersLog.push({question:qObj.q,yourAnswer:Array.isArray(answer)?answer.join(", "):answer,correctAnswer:qObj.a.join(", "),correct:isCorrect});
+    Array.from(answersEl.querySelectorAll("button,input")).forEach(el=>el.disabled=true);
+    nextBtn.style.display="inline-block";
 }
 
-nextBtn.addEventListener("click", () => {
-    currentQuestionIndex++;
-    showQuestion();
-});
+nextBtn.addEventListener("click",()=>{currentQuestionIndex++;showQuestion();});
 
-function showResults() {
-    questionEl.textContent = "Quiz Complete!";
-    answersEl.innerHTML = "";
-    feedbackEl.textContent = "";
-    memeEl.textContent = "";
-    nextBtn.style.display = "none";
-    progressEl.textContent = "";
-
-    let html = "<h2>Results</h2>";
-    html += "<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th></tr>";
-    answersLog.forEach(a => {
-        html += `<tr>
-            <td>${a.question}</td>
-            <td class="${a.correct ? 'correct' : 'wrong'}">${a.yourAnswer}</td>
-            <td>${a.correctAnswer}</td>
-        </tr>`;
+function showResults(){
+    questionEl.textContent="Quiz Complete!";
+    answersEl.innerHTML=""; feedbackEl.textContent=""; memeEl.textContent=""; nextBtn.style.display="none"; progressEl.textContent="";
+    let html="<h2>Results</h2><table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th></tr>";
+    answersLog.forEach(a=>{
+        html+=`<tr><td>${a.question}</td><td class="${a.correct?'correct':'wrong'}">${a.yourAnswer}</td><td>${a.correctAnswer}</td></tr>`;
     });
-    html += "</table>";
-    resultsEl.innerHTML = html;
+    html+="</table>"; resultsEl.innerHTML=html;
 }
 </script>
 </body>
