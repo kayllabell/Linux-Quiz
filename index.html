@@ -62,7 +62,7 @@ td.wrong { background-color: #a00; color: #fff; }
 <div class="container" id="cover">
     <h1>Linux Midterm 2026 CST Level 2</h1>
     <p>⚠️ Disclaimer: This quiz is AI-generated. I am <strong>not responsible</strong> if it tricks you, misleads you, or makes your terminal cry. Use at your own risk! 🤖💻</p>
-    <button id="start-btn">Start Quiz</button>
+    <button id="startBtn">Start Quiz</button>
 </div>
 
 <div class="container" id="quiz" style="display:none;">
@@ -402,6 +402,21 @@ function selectAnswer(answer){
 }
 
 nextBtn.addEventListener("click",()=>{currentQuestionIndex++;showQuestion();});
+
+
+function startQuiz() {
+
+    document.getElementById("cover").style.display = "none";  // hide cover
+    
+        document.getElementById("quiz").style.display = "block";   // show quiz
+        
+            // You can also call your function to show the first question here
+            
+                showNextQuestion(); // or whatever function you use to load questions
+                
+                }
+                
+                document.getElementById("startBtn").addEventListener("click", startQuiz);
 
 function showResults(){
     questionEl.textContent="Quiz Complete!";
