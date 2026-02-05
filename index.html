@@ -330,6 +330,18 @@ const questionPool = [
   {q:"Linux meme: I would tell you a UDP joke, but...",type:"true-false",a:["true"],explanation:"...you might not get it 😂"},
   {q:"Disclaimer: This quiz is AI-generated and may contain errors. The creator is not responsible for wrong answers. Enjoy learning!",type:"info",a:[],explanation:"Fun cover-page disclaimer. Remember, even AI can be wrong sometimes 😎"}
 ];
+// ===============================================
+// Start Quiz Button functionality
+// ===============================================
+document.getElementById("startBtn").addEventListener("click", function() {
+// Hide the cover page
+  document.getElementById("cover").style.display = "none";
+  
+// show the quiz container
+  document.getElementById("quiz").style.display = "block";
+  
+  // show the first question
+  showQuestion();
 
 // ===================== QUIZ LOGIC =====================
 let selectedQuestions = [];
@@ -404,16 +416,7 @@ function selectAnswer(answer){
 nextBtn.addEventListener("click",()=>{currentQuestionIndex++;showQuestion();});
 
 
-document.getElementById("startBtn").addEventListener("click", function() {
 
-document.getElementById("cover").style.display = "none";
-        
-
-document.getElementById("quiz").style.display = "block";
-                
-
-showQuestion();
-});
             
 
 function showResults(){
