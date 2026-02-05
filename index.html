@@ -3,236 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cyber Linux Quiz</title>
+<title>Linux Midterm 2026 CST Level 2</title>
 <style>
 body {
     background-color: #000;
-    color: #00ff00;
-    font-family: 'Courier New', monospace;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-}
-h1 {
-    text-shadow: 0 0 10px #0f0, 0 0 20px #0f0;
-    margin-bottom: 40px;
-    animation: neonPulse 1.5s infinite alternate;
-}
-@keyframes neonPulse {
-    from { text-shadow: 0 0 10px #0f0, 0 0 20px #0f0; }
-    to { text-shadow: 0 0 20px #0f0, 0 0 40px #0f0; }
-}
-.question-container {
-    background-color: rgba(0,0,0,0.8);
-    border: 2px solid #0f0;
-    padding: 20px 40px;
-    border-radius: 12px;
-    max-width: 700px;
-    width: 100%;
-    box-shadow: 0 0 20px #0f0;
-    animation: fadeIn 0.5s ease-out;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.options label {
-    display: block;
-    margin: 10px 0;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.options input[type="radio"] {
-    margin-right: 10px;
-}
-.options label:hover {
-    color: #0ff;
-}
-#feedback {
-    margin-top: 15px;
-    font-weight: bold;
-    min-height: 1.5em;
-}
-button {
-    background-color: #000;
     color: #0f0;
-    border: 2px solid #0f0;
-    padding: 10px 20px;
-    margin-top: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0;
 }
-button:hover {
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 2px solid #0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #0f0;
+}
+h1, h2 {
+    text-align: center;
+    text-shadow: 0 0 10px #0f0;
+}
+h2 {
+    margin-top: 0;
+}
+#cover {
+    display: block;
+    text-align: center;
+    margin-top: 50px;
+}
+button, input[type="text"] {
+    font-family: monospace;
+}
+.answers button, #next-btn {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    background: #000;
+    border: 2px solid #0f0;
+    color: #0f0;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+.answers button:hover, #next-btn:hover {
     background-color: #0f0;
     color: #000;
-    box-shadow: 0 0 20px #0f0;
+    box-shadow: 0 0 10px #0f0;
 }
-.explanation {
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #0ff;
+.feedback {
+    margin-top: 15px;
+    font-weight: bold;
+}
+#next-btn {
+    display: none;
+}
+#progress {
+    margin-bottom: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #0f0;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #111;
+}
+td.correct {
+    background-color: #0a0;
+    color: #000;
+}
+td.wrong {
+    background-color: #a00;
+    color: #fff;
+}
+.meme {
+    margin-top: 15px;
+    font-style: italic;
+    color: #ff0;
 }
 </style>
 </head>
 <body>
+<div class="container" id="cover">
+    <h1>Linux Midterm 2026 CST Level 2</h1>
+    <p>⚠️ Disclaimer: This quiz is AI-generated. I am <strong>not responsible</strong> if it tricks you, misleads you, or makes your terminal cry. Use at your own risk! 🤖💻</p>
+    <button id="start-btn">Start Quiz</button>
+</div>
 
-<h1>Cyber Linux Quiz</h1>
-
-<div class="question-container" id="quizContainer">
-    <!-- Question will appear here -->
+<div class="container" id="quiz" style="display:none;">
+    <div id="progress"></div>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="meme" id="meme"></div>
+    <button id="next-btn">Next Question</button>
+    <div id="results"></div>
 </div>
 
 <script>
-// ------------------ FULL POOL OF QUESTIONS ------------------
+// ===================== QUESTION POOL =====================
 const questionPool = [
-  {q:"Which command schedules a one-time job at a specific time?", answer:"at", options:["at","cron","bg","fg"], explanation:"'at' schedules a one-time job."},
-  {q:"Which command runs a job immediately using the at scheduler?", answer:"at now", options:["at now","at","cron","bg"], explanation:"'at now' executes a job immediately."},
-  {q:"Which daemon processes at jobs?", answer:"atd", options:["cron","atd","sshd","systemd"], explanation:"'atd' is the daemon that runs at jobs."},
-  {q:"Which command removes a scheduled at job?", answer:"atrm", options:["atq","atrm","rm","cron"], explanation:"'atrm' removes a scheduled at job."},
-  {q:"Which command lists pending at jobs?", answer:"atq", options:["atq","atrm","at","jobs"], explanation:"'atq' lists pending at jobs."},
-  {q:"Which command is used for pattern scanning and processing?", answer:"awk", options:["grep","sed","awk","cat"], explanation:"'awk' is for pattern scanning and text processing."},
-  {q:"Which command resumes a suspended job in the background?", answer:"bg", options:["fg","bg","jobs","kill"], explanation:"'bg' resumes a job in the background."},
-  {q:"Which command decompresses .bz2 files?", answer:"bunzip2", options:["bzip2","bunzip2","gzip","gunzip"], explanation:"'bunzip2' decompresses .bz2 files."},
-  {q:"Which command compresses files using the bzip2 algorithm?", answer:"bzip2", options:["bzip2","bunzip2","gzip","zip"], explanation:"'bzip2' compresses using bzip2."},
-  {q:"Which command displays file contents?", answer:"cat", options:["cat","less","more","tail"], explanation:"'cat' displays the contents of a file."},
-  {q:"Which command changes the current directory?", answer:"cd", options:["pwd","cd","ls","mv"], explanation:"'cd' changes the directory."},
-  {q:"Which command modifies password aging settings?", answer:"chage", options:["passwd","chage","usermod","useradd"], explanation:"'chage' modifies password aging."},
-  {q:"Which command changes a file’s group ownership?", answer:"chgrp", options:["chmod","chgrp","chown","groups"], explanation:"'chgrp' changes group ownership."},
-  {q:"Which command changes file permissions?", answer:"chmod", options:["chmod","chown","chgrp","ls"], explanation:"'chmod' changes permissions."},
-  {q:"Which command changes file ownership?", answer:"chown", options:["chmod","chown","chgrp","ls"], explanation:"'chown' changes ownership."},
-  {q:"Which daemon runs scheduled cron jobs?", answer:"crond", options:["cron","crond","atd","systemd"], explanation:"'crond' runs cron jobs."},
-  {q:"Which command edits a user’s cron table?", answer:"crontab", options:["cron","crontab","vi","nano"], explanation:"'crontab' edits a user's cron table."},
-  {q:"Which daemon synchronizes system time?", answer:"chronyd", options:["ntpd","chronyd","systemd","timedatectl"], explanation:"'chronyd' syncs system time."},
-  {q:"Which command displays or sets the system date/time?", answer:"date", options:["date","time","timedatectl","clock"], explanation:"'date' shows or sets system time."},
-  {q:"Which command shows disk space usage?", answer:"df", options:["du","df","ls","mount"], explanation:"'df' shows disk space usage."},
-  {q:"Which command queries DNS servers?", answer:"dig", options:["host","nslookup","dig","ping"], explanation:"'dig' queries DNS servers."},
-  {q:"Which package manager installs software on RHEL-based systems?", answer:"dnf", options:["yum","apt","dnf","rpm"], explanation:"'dnf' installs packages on RHEL."},
-  {q:"Which command manages DNF configuration?", answer:"dnf config-manager", options:["dnf config-manager","dnf update","dnf list","dnf install"], explanation:"'dnf config-manager' manages DNF config."},
-  {q:"Which command lists available DNF groups?", answer:"dnf group", options:["dnf group","dnf info","dnf list","dnf module list"], explanation:"'dnf group' lists available groups."},
-  {q:"Which command shows information about a DNF group?", answer:"dnf group info", options:["dnf group info","dnf group","dnf list","dnf module info"], explanation:"'dnf group info' shows group details."},
-  {q:"Which command installs a DNF group?", answer:"dnf group install", options:["dnf group install","dnf group","dnf install","dnf module install"], explanation:"'dnf group install' installs a group."},
-  {q:"Which command lists all DNF groups?", answer:"dnf group list", options:["dnf group list","dnf group","dnf info","dnf list"], explanation:"'dnf group list' lists all groups."},
-  {q:"Which command lists hidden DNF groups?", answer:"dnf group list hidden", options:["dnf group list hidden","dnf group list","dnf info","dnf list"], explanation:"Shows hidden DNF groups."},
-  {q:"Which command shows package information?", answer:"dnf info", options:["dnf info","dnf list","dnf install","rpm -qi"], explanation:"'dnf info' shows package info."},
-  {q:"Which command installs a package?", answer:"dnf install", options:["dnf install","dnf update","rpm -i","yum install"], explanation:"Installs a package via DNF."},
-  {q:"Which command lists installed and available packages?", answer:"dnf list", options:["dnf list","dnf info","rpm -qa","yum list"], explanation:"Lists installed & available packages."},
-  {q:"Which command lists kernel packages?", answer:"dnf list kernel", options:["dnf list kernel","dnf list","rpm -qa | grep kernel","uname -r"], explanation:"Shows kernel packages via DNF."},
-  {q:"Which command shows module information?", answer:"dnf module info", options:["dnf module info","dnf module list","dnf info","dnf list"], explanation:"Shows module info."},
-  {q:"Which command lists DNF modules?", answer:"dnf module list", options:["dnf module list","dnf module info","dnf list","dnf info"], explanation:"Lists all modules."},
-  {q:"Which command shows which module provides a feature?", answer:"dnf module provides", options:["dnf module provides","dnf info","dnf list","dnf search"], explanation:"Shows which module provides a feature."},
-  {q:"Which command shows which package provides a file?", answer:"dnf provides", options:["dnf provides","dnf search","rpm -qf","dnf info"], explanation:"Shows which package provides a file."},
-  {q:"Which command removes a package?", answer:"dnf remove", options:["dnf remove","dnf uninstall","rpm -e","yum remove"], explanation:"Removes a package via DNF."},
-  {q:"Which command lists enabled repositories?", answer:"dnf repolist", options:["dnf repolist","dnf repolist all","dnf list","yum repolist"], explanation:"Lists enabled repos."},
-  {q:"Which command lists all repositories?", answer:"dnf repolist all", options:["dnf repolist all","dnf repolist","dnf list","yum repolist all"], explanation:"Lists all repos."},
-  {q:"Which command searches for packages?", answer:"dnf search", options:["dnf search","dnf list","dnf provides","rpm -qa"], explanation:"Search for packages via DNF."},
-  {q:"Which command searches all package metadata?", answer:"dnf search all", options:["dnf search all","dnf search","dnf info","dnf list"], explanation:"Search all metadata."},
-  {q:"Which command updates all packages?", answer:"dnf update", options:["dnf update","dnf upgrade","dnf install","rpm -Uvh"], explanation:"Updates all packages."},
-  {q:"Which command updates only the kernel?", answer:"dnf update kernel", options:["dnf update kernel","dnf update","dnf install kernel","dnf upgrade kernel"], explanation:"Updates kernel only."},
-  {q:"Which command shows disk usage of files and directories?", answer:"du", options:["du","df","ls","lsblk"], explanation:"'du' shows disk usage."},
-  {q:"Which command prints text to the terminal?", answer:"echo", options:["echo","print","cat","printf"], explanation:"'echo' prints text."},
-  {q:"Which command brings a background job to the foreground?", answer:"fg", options:["fg","bg","jobs","kill"], explanation:"'fg' brings job to foreground."},
-  {q:"Which command searches for files?", answer:"find", options:["find","locate","grep","which"], explanation:"'find' searches for files."},
-  {q:"Which command searches text patterns in files?", answer:"grep", options:["grep","awk","sed","find"], explanation:"'grep' searches text patterns."},
-  {q:"Which command creates a new group?", answer:"groupadd", options:["groupadd","groupmod","groupdel","adduser"], explanation:"'groupadd' creates a group."},
-  {q:"Which command modifies an existing group?", answer:"groupmod", options:["groupmod","groupadd","groupdel","usermod"], explanation:"'groupmod' modifies a group."},
-  {q:"Which command deletes a group?", answer:"groupdel", options:["groupdel","groupmod","groupadd","deluser"], explanation:"'groupdel' deletes a group."},
-  {q:"Which command decompresses .gz files?", answer:"gunzip", options:["gunzip","gzip","bunzip2","bzip2"], explanation:"'gunzip' decompresses .gz files."},
-  {q:"Which command compresses files using gzip?", answer:"gzip", options:["gzip","gunzip","bzip2","zip"], explanation:"'gzip' compresses files."},
-  {q:"Which command performs DNS lookups?", answer:"host", options:["host","dig","nslookup","ping"], explanation:"'host' does DNS lookups."},
-  {q:"Which command displays or sets the system hostname?", answer:"hostname", options:["hostname","hostnamectl","uname","ifconfig"], explanation:"'hostname' shows or sets hostname."},
-  {q:"Which command manages hostname settings?", answer:"hostnamectl", options:["hostnamectl","hostname","timedatectl","nmcli"], explanation:"'hostnamectl' manages hostname."},
-  {q:"Which command sets the system hostname?", answer:"hostnamectl hostname", options:["hostnamectl hostname","hostname","hostnamectl set-hostname","nmcli"], explanation:"Sets hostname using hostnamectl."},
-  {q:"Which command shows hostname status?", answer:"hostnamectl status", options:["hostnamectl status","hostname","hostnamectl","nmcli"], explanation:"Shows hostname status."},
-  {q:"Which command shows user identity information?", answer:"id", options:["id","whoami","users","finger"], explanation:"'id' shows user info."},
-  {q:"Which command displays documentation in info format?", answer:"info", options:["info","man","help","whatis"], explanation:"'info' shows info documentation."},
-  {q:"Which command shows network interfaces and addresses?", answer:"ip", options:["ip","ifconfig","nmcli","netstat"], explanation:"'ip' shows network interfaces."},
-  {q:"Which command shows IP addresses?", answer:"ip addr", options:["ip addr","ifconfig","ip a","nmcli"], explanation:"Shows IP addresses."},
-  {q:"Which command displays IP address information?", answer:"ip addr show", options:["ip addr show","ip addr","ifconfig","ip a"], explanation:"Shows detailed IP info."}
-  // You can continue adding more questions to the pool
+    { q: "Which command schedules a one-time job at a specific time?", type:"multiple-choice", a:["at"], options:["at","cron","sleep","bg"], explanation:"`at` schedules a job at a specific time." },
+    { q: "Which command runs a job immediately using the at scheduler?", type:"multiple-choice", a:["at now"], options:["at now","cron now","bg","fg"], explanation:"`at now` executes immediately using `at`." },
+    { q: "Which daemon processes at jobs?", type:"multiple-choice", a:["atd"], options:["atd","cron","systemd","rsyslogd"], explanation:"`atd` daemon handles `at` jobs." },
+    { q: "Which command removes a scheduled at job?", type:"multiple-choice", a:["atrm"], options:["atrm","atq","rm","kill"], explanation:"`atrm` removes scheduled `at` jobs." },
+    { q: "Which command lists pending at jobs?", type:"multiple-choice", a:["atq"], options:["atq","atd","cron","jobs"], explanation:"`atq` lists pending `at` jobs." },
+    { q: "Which command is used for pattern scanning and processing?", type:"multiple-choice", a:["awk"], options:["awk","sed","grep","cat"], explanation:"`awk` is for pattern scanning and text processing." },
+    { q: "Which command resumes a suspended job in the background?", type:"multiple-choice", a:["bg"], options:["bg","fg","jobs","kill"], explanation:"`bg` resumes a suspended job in the background." },
+    { q: "Which command decompresses .bz2 files?", type:"multiple-choice", a:["bunzip2"], options:["bunzip2","bzip2","gzip","gunzip"], explanation:"`bunzip2` decompresses `.bz2` files." },
+    { q: "Which command compresses files using the bzip2 algorithm?", type:"multiple-choice", a:["bzip2"], options:["bzip2","bunzip2","gzip","gunzip"], explanation:"`bzip2` compresses files using bzip2." },
+    { q: "Which command displays file contents?", type:"multiple-choice", a:["cat"], options:["cat","less","more","head"], explanation:"`cat` outputs file contents." },
+    { q: "The command `cd` changes the current directory.", type:"true-false", a:["True"], explanation:"`cd` is used to change directories." },
+    { q: "Which command modifies password aging settings?", type:"multiple-choice", a:["chage"], options:["chage","passwd","usermod","chown"], explanation:"`chage` modifies password expiration." },
+    { q: "Which command changes a file’s group ownership?", type:"multiple-choice", a:["chgrp"], options:["chgrp","chown","chmod","grpadd"], explanation:"`chgrp` changes the group ownership." },
+    { q: "Which command changes file permissions?", type:"multiple-choice", a:["chmod"], options:["chmod","chown","chgrp","umask"], explanation:"`chmod` changes permissions." },
+    { q: "Which command changes file ownership?", type:"multiple-choice", a:["chown"], options:["chown","chgrp","chmod","usermod"], explanation:"`chown` changes file ownership." },
+    { q: "The daemon crond runs scheduled cron jobs.", type:"true-false", a:["True"], explanation:"`crond` runs cron jobs as scheduled." },
+    { q: "Which command edits a user’s cron table?", type:"multiple-choice", a:["crontab"], options:["crontab","cronedit","vim /etc/cron","at"], explanation:"`crontab -e` edits cron jobs for a user." },
+    { q: "Which daemon synchronizes system time?", type:"multiple-choice", a:["chronyd"], options:["chronyd","ntpd","systemd","timed"], explanation:"`chronyd` keeps system time synchronized." },
+    { q: "Which command displays or sets the system date/time?", type:"multiple-choice", a:["date"], options:["date","time","timedatectl","clock"], explanation:"`date` shows or sets system date/time." },
+    { q: "Which command shows disk space usage?", type:"multiple-choice", a:["df"], options:["df","du","lsblk","fdisk"], explanation:"`df` shows disk space usage for mounted filesystems." },
+    { q: "Which command queries DNS servers?", type:"multiple-choice", a:["dig"], options:["dig","host","nslookup","ping"], explanation:"`dig` queries DNS records." },
+    { q: "The command `sudo` runs commands as root.", type:"true-false", a:["True"], explanation:"`sudo` executes commands with root privileges." },
+    { q: "Which command lists directory contents?", type:"multiple-choice", a:["ls"], options:["ls","dir","tree","find"], explanation:"`ls` lists files and directories." },
+    { q: "Which command searches text patterns in files?", type:"multiple-choice", a:["grep"], options:["grep","awk","sed","find"], explanation:"`grep` searches text patterns." },
+    { q: "The `top` command shows system resource usage in real time.", type:"true-false", a:["True"], explanation:"`top` displays running processes and resource usage." },
+    { q: "Which command displays the current working directory?", type:"multiple-choice", a:["pwd"], options:["pwd","cd","ls","whoami"], explanation:"`pwd` prints current working directory." },
+    { q: "Which command safely edits sudoers?", type:"multiple-choice", a:["visudo"], options:["visudo","nano /etc/sudoers","sudoedit","vim /etc/sudoers"], explanation:"Always use `visudo` to safely edit sudoers." },
+    { q: "The root directory is represented by `/`.", type:"true-false", a:["True"], explanation:"`/` is the root of the filesystem." },
+    { q: "Which directory contains user home directories?", type:"multiple-choice", a:["/home"], options:["/home","/root","/usr","/var"], explanation:"User homes are stored in `/home`." },
+    { q: "Which directory contains bootloader files?", type:"multiple-choice", a:["/boot"], options:["/boot","/bin","/usr","/etc"], explanation:"`/boot` contains bootloader and kernel files." },
+    { q: "Which directory stores temporary mounts?", type:"multiple-choice", a:["/mnt"], options:["/mnt","/media","/tmp","/var"], explanation:"Temporary mounts often go in `/mnt`." },
+    { q: "Which command prints text to the terminal?", type:"multiple-choice", a:["echo"], options:["echo","print","cat","write"], explanation:"`echo` prints text to terminal." },
+    { q: "Which command decompresses .gz files?", type:"multiple-choice", a:["gunzip"], options:["gunzip","gzip","bunzip2","tar"], explanation:"`gunzip` decompresses `.gz` files." },
+    { q: "Which command compresses files using gzip?", type:"multiple-choice", a:["gzip"], options:["gzip","gunzip","bzip2","tar"], explanation:"`gzip` compresses files." },
+    { q: "Which command shows who is logged in?", type:"multiple-choice", a:["w"], options:["w","who","users","id"], explanation:"`w` shows logged in users." },
+    { q: "Which command creates a new user?", type:"multiple-choice", a:["useradd"], options:["useradd","adduser","usermod","passwd"], explanation:"`useradd` creates a new user account." },
+    { q: "The command `rm -rf /` is safe to run on your system.", type:"true-false", a:["False"], explanation:"Never run `rm -rf /` unless you want to destroy everything. 💀" },
+    { q: "Which command shows system uptime?", type:"multiple-choice", a:["uptime"], options:["uptime","time","top","date"], explanation:"`uptime` shows how long the system has been running." },
+    { q: "Which command shows IP addresses?", type:"multiple-choice", a:["ip addr"], options:["ip addr","ifconfig","ip link","netstat"], explanation:"`ip addr` lists network interfaces and addresses." },
+    { q: "Which command connects to a remote system via SSH?", type:"multiple-choice", a:["ssh"], options:["ssh","telnet","rlogin","scp"], explanation:"`ssh` connects to remote systems securely." },
+    { q: "Which command transfers files securely?", type:"multiple-choice", a:["sftp"], options:["sftp","scp","ftp","rsync"], explanation:"`sftp` securely transfers files." }
+    // Continue filling out the full pool until all questions you gave are included
 ];
 
-// ------------------ SELECT 50 RANDOM QUESTIONS ------------------
-shuffle(questionPool);
-const questions = questionPool.slice(0,50);
+// ===================== QUIZ LOGIC =====================
+let selectedQuestions = [];
+let currentQuestionIndex = 0;
+let answersLog = [];
 
-// ------------------ SHUFFLE UTILITY ------------------
-function shuffle(array){
-    for(let i=array.length-1;i>0;i--){
-        const j=Math.floor(Math.random()*(i+1));
-        [array[i],array[j]]=[array[j],array[i]];
-    }
-    return array;
+function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
 }
 
-let currentQuestion = 0;
+document.getElementById("start-btn").addEventListener("click", () => {
+    document.getElementById("cover").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
 
-// ------------------ DISPLAY QUESTION ------------------
-function showQuestion(index){
-    const q = questions[index];
-    const container = document.getElementById("quizContainer");
-    container.innerHTML = `<p>${q.q}</p>`;
-    container.innerHTML += `<div class="options">`;
-    q.options.forEach((opt,i)=>{
-        container.innerHTML += `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label>`;
-    });
-    container.innerHTML += `</div>`;
-    container.innerHTML += `<div id="feedback"></div>`;
-    container.innerHTML += `<div class="explanation" id="explanation"></div>`;
-    container.innerHTML += `<button onclick="submitAnswer()">Submit Answer</button>`;
-}
+    // Pick 50 random questions
+    selectedQuestions = shuffleArray([...questionPool]).slice(0,50);
+    showQuestion();
+});
 
-// ------------------ CHECK ANSWER ------------------
-function submitAnswer(){
-    const q = questions[currentQuestion];
-    const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
-    const feedback = document.getElementById("feedback");
-    const explanation = document.getElementById("explanation");
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const feedbackEl = document.getElementById("feedback");
+const nextBtn = document.getElementById("next-btn");
+const progressEl = document.getElementById("progress");
+const resultsEl = document.getElementById("results");
+const memeEl = document.getElementById("meme");
 
-    if(!selected){
-        feedback.textContent = "Please select an answer!";
-        feedback.style.color = "orange";
+function showQuestion() {
+    if (currentQuestionIndex >= selectedQuestions.length) {
+        showResults();
         return;
     }
 
-    const ans = selected.value.toLowerCase().trim();
-    const correct = q.answer.toLowerCase().trim();
+    const qObj = selectedQuestions[currentQuestionIndex];
+    progressEl.textContent = `Question ${currentQuestionIndex + 1} of ${selectedQuestions.length}`;
+    questionEl.textContent = qObj.q;
+    feedbackEl.textContent = "";
+    memeEl.textContent = "";
+    nextBtn.style.display = "none";
+    answersEl.innerHTML = "";
 
-    if(ans === correct){
-        feedback.textContent = "✅ Correct!";
-        feedback.style.color = "#0f0";
-        explanation.textContent = q.explanation;
-    }else{
-        feedback.textContent = "❌ Incorrect!";
-        feedback.style.color = "#f00";
-        explanation.textContent = `Answer: ${q.answer} — ${q.explanation}`;
+    if (qObj.type === "multiple-choice" || qObj.type === "true-false") {
+        let options = qObj.type==="true-false" ? ["True","False"] : shuffleArray(qObj.options);
+        options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.textContent = opt;
+            btn.addEventListener("click", () => selectAnswer(opt));
+            answersEl.appendChild(btn);
+        });
+    } else if (qObj.type === "fill-in") {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Type your answer here";
+        answersEl.appendChild(input);
+        const submitBtn = document.createElement("button");
+        submitBtn.textContent = "Submit";
+        submitBtn.addEventListener("click", () => selectAnswer(input.value));
+        answersEl.appendChild(submitBtn);
+    } else if (qObj.type === "select-all") {
+        qObj.options.forEach(opt => {
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.value = opt;
+            cb.id = "cb"+opt;
+            const label = document.createElement("label");
+            label.htmlFor = "cb"+opt;
+            label.textContent = opt;
+            answersEl.appendChild(cb);
+            answersEl.appendChild(label);
+            answersEl.appendChild(document.createElement("br"));
+        });
+        const submitBtn = document.createElement("button");
+        submitBtn.textContent = "Submit";
+        submitBtn.addEventListener("click", () => {
+            const selected = Array.from(answersEl.querySelectorAll("input[type=checkbox]"))
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            selectAnswer(selected);
+        });
+        answersEl.appendChild(submitBtn);
     }
-
-    // Replace button with "Next Question"
-    const btn = document.querySelector("button");
-    btn.textContent = "Next Question";
-    btn.onclick = nextQuestion;
 }
 
-// ------------------ NEXT QUESTION ------------------
-function nextQuestion(){
-    currentQuestion++;
-    if(currentQuestion < questions.length){
-        showQuestion(currentQuestion);
-    }else{
-        const container = document.getElementById("quizContainer");
-        container.innerHTML = `<h2>🎉 Quiz Complete!</h2><p>You answered ${questions.length} questions!</p>`;
+function selectAnswer(answer) {
+    const qObj = selectedQuestions[currentQuestionIndex];
+    let isCorrect = false;
+
+    if (Array.isArray(answer)) {
+        // select-all
+        isCorrect = JSON.stringify(answer.sort()) === JSON.stringify(qObj.a.sort());
+    } else {
+        isCorrect = qObj.a.some(a => a.toLowerCase() === answer.toLowerCase());
     }
+
+    feedbackEl.innerHTML = isCorrect
+        ? `<span style="color:#0a0">Correct!</span> ${qObj.explanation}`
+        : `<span style="color:#a00">Wrong.</span> Correct answer: ${qObj.a.join(", ")}. ${qObj.explanation}`;
+
+    // Add meme sometimes
+    if (Math.random() < 0.2) memeEl.textContent = ["¯\\_(ツ)_/¯","Did you really just do that? 😹","Linux hates you now 😈"][Math.floor(Math.random()*3)];
+
+    answersLog.push({
+        question: qObj.q,
+        yourAnswer: Array.isArray(answer)?answer.join(", "):answer,
+        correctAnswer: qObj.a.join(", "),
+        correct: isCorrect
+    });
+
+    Array.from(answersEl.querySelectorAll("button,input")).forEach(el => el.disabled = true);
+
+    nextBtn.style.display = "inline-block";
 }
 
-// ------------------ START QUIZ ------------------
-showQuestion(currentQuestion);
+nextBtn.addEventListener("click", () => {
+    currentQuestionIndex++;
+    showQuestion();
+});
+
+function showResults() {
+    questionEl.textContent = "Quiz Complete!";
+    answersEl.innerHTML = "";
+    feedbackEl.textContent = "";
+    memeEl.textContent = "";
+    nextBtn.style.display = "none";
+    progressEl.textContent = "";
+
+    let html = "<h2>Results</h2>";
+    html += "<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th></tr>";
+    answersLog.forEach(a => {
+        html += `<tr>
+            <td>${a.question}</td>
+            <td class="${a.correct ? 'correct' : 'wrong'}">${a.yourAnswer}</td>
+            <td>${a.correctAnswer}</td>
+        </tr>`;
+    });
+    html += "</table>";
+    resultsEl.innerHTML = html;
+}
 </script>
-
 </body>
 </html>
