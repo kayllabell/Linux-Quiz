@@ -1,0 +1,51 @@
+#!/usr/bin/python3
+
+"""
+    Program name: calculate_area.py
+    Program purpose: This program greets the user and calculates the area of a square, a rectangle and a circle.
+    Author: Amal Ahmed Anda, edited by Kayla Gaudreau 040790023, 022
+    Date & version: January 30th, 2026, version 2.0
+    Completion time: 15 minutes
+"""
+
+# Constant variable(s)
+
+pi = 3.14
+
+# Take user's name as input.
+
+name = input("Enter your name: ")
+
+print()
+
+# In this section, we are calculating areas
+
+print(f"Hello, {name}! Let's first calculate the area of a square.")
+
+side_of_square = float(input("Enter the side of the square: "))
+
+square_area = side_of_square * side_of_square
+
+print(f"Now let's calculate the area of a rectangle.")
+
+rectangle_length = float(input("Enter the length of the square: "))
+
+rectangle_width = float(input("Enter the width of the rectangle: "))
+
+rectangle_area = rectangle_length * rectangle_width
+
+print(f"Finally, let's calculate the area of a circle.")
+
+circle_radius = float(input("Enter the radius of the circle: "))
+
+circle_area = circle_radius * circle_radius * pi
+
+# In this section we are printing the outcome
+
+print()
+
+print(f"The area of the square with side {side_of_square} is {square_area}.")
+
+print(f"The area of the rectangle with length {rectangle_length} and width {rectangle_width} is {rectangle_area}.")
+
+print(f"The area of the circle with radius {circle_radius} is {circle_area}.")

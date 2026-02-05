@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Linux CST8305 Midterm practice</title>
+
+<style>
+body {
+  font-family: monospace;
+  background: #0b1220;
+  color: #e5e7eb;
+  max-width: 1000px;
+  margin: auto;
+  padding: 30px;
+}
+h1 {
+  text-align: center;
+  color: #38bdf8;
+}
+.question {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+}
+.choice {
+  background: #1e293b;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.choice:hover {
+  background: #334155;
+}
+button {
+  margin-top: 20px;
+  padding: 12px 25px;
+  background: #38bdf8;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+}
+button:hover {
+  background: #0ea5e9;
+}
+#result {
+  margin-top: 30px;
+  font-size: 1.4em;
+  color: #22c55e;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Linux Commands & Files Midterm practice</h1>
+
+<div id="quiz">
+  <div id="question" class="question"></div>
+  <div id="choices"></div>
+  <button onclick="submitAnswer()">Submit</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+const quizData = [
+  {q:"Which command schedules a one-time job at a specific time?",a:"at"},
+  {q:"Which command runs a job immediately using the at scheduler?",a:"at now"},
+  {q:"Which daemon processes at jobs?",a:"atd"},
+  {q:"Which command removes a scheduled at job?",a:"atrm"},
+  {q:"Which command lists pending at jobs?",a:"atq"},
+  {q:"Which command is used for pattern scanning and processing?",a:"awk"},
+  {q:"Which command resumes a suspended job in the background?",a:"bg"},
+  {q:"Which command decompresses .bz2 files?",a:"bunzip2"},
+  {q:"Which command compresses files using the bzip2 algorithm?",a:"bzip2"},
+  {q:"Which command displays file contents?",a:"cat"},
+  {q:"Which command changes the current directory?",a:"cd"},
+  {q:"Which command modifies password aging settings?",a:"chage"},
+  {q:"Which command changes a file’s group ownership?",a:"chgrp"},
+  {q:"Which command changes file permissions?",a:"chmod"},
+  {q:"Which command changes file ownership?",a:"chown"},
+  {q:"Which daemon runs scheduled cron jobs?",a:"crond"},
+  {q:"Which command edits a user’s cron table?",a:"crontab"},
+  {q:"Which daemon synchronizes system time?",a:"chronyd"},
+  {q:"Which command displays or sets the system date/time?",a:"date"},
+  {q:"Which command shows disk space usage?",a:"df"},
+  {q:"Which command queries DNS servers?",a:"dig"},
+  {q:"Which package manager installs software on RHEL-based systems?",a:"dnf"},
+  {q:"Which command manages DNF configuration?",a:"dnf config-manager"},
+  {q:"Which command lists available DNF groups?",a:"dnf group"},
+  {q:"Which command shows information about a DNF group?",a:"dnf group info"},
+  {q:"Which command installs a DNF group?",a:"dnf group install"},
+  {q:"Which command lists all DNF groups?",a:"dnf group list"},
+  {q:"Which command lists hidden DNF groups?",a:"dnf group list hidden"},
+  {q:"Which command shows package information?",a:"dnf info"},
+  {q:"Which command installs a package?",a:"dnf install"},
+  {q:"Which command lists installed and available packages?",a:"dnf list"},
+  {q:"Which command lists kernel packages?",a:"dnf list kernel"},
+  {q:"Which command shows module information?",a:"dnf module info"},
+  {q:"Which command lists DNF modules?",a:"dnf module list"},
+  {q:"Which command shows which module provides a feature?",a:"dnf module provides"},
+  {q:"Which command shows which package provides a file?",a:"dnf provides"},
+  {q:"Which command removes a package?",a:"dnf remove"},
+  {q:"Which command lists enabled repositories?",a:"dnf repolist"},
+  {q:"Which command lists all repositories?",a:"dnf repolist all"},
+  {q:"Which command searches for packages?",a:"dnf search"},
+  {q:"Which command searches all package metadata?",a:"dnf search all"},
+  {q:"Which command updates all packages?",a:"dnf update"},
+  {q:"Which command updates only the kernel?",a:"dnf update kernel"},
+  {q:"Which command shows disk usage of files and directories?",a:"du"},
+  {q:"Which command prints text to the terminal?",a:"echo"},
+  {q:"Which command brings a background job to the foreground?",a:"fg"},
+  {q:"Which command searches for files?",a:"find"},
+  {q:"Which command searches text patterns in files?",a:"grep"},
+  {q:"Which command creates a new group?",a:"groupadd"},
+  {q:"Which command modifies an existing group?",a:"groupmod"},
+  {q:"Which command deletes a group?",a:"groupdel"},
+  {q:"Which command decompresses .gz files?",a:"gunzip"},
+  {q:"Which command compresses files using gzip?",a:"gzip"},
+  {q:"Which command performs DNS lookups?",a:"host"},
+  {q:"Which command displays or sets the system hostname?",a:"hostname"},
+  {q:"Which command manages hostname settings?",a:"hostnamectl"},
+  {q:"Which command sets the system hostname?",a:"hostnamectl hostname"},
+  {q:"Which command shows hostname status?",a:"hostnamectl status"},
+  {q:"Which command shows user identity information?",a:"id"},
+  {q:"Which command displays documentation in info format?",a:"info"},
+  {q:"Which command shows network interfaces and addresses?",a:"ip"},
+  {q:"Which command shows IP addresses?",a:"ip addr"},
+  {q:"Which command displays IP address information?",a:"ip addr show"},
+  {q:"Which command shows network links?",a:"ip link"},
+  {q:"Which command displays routing table information?",a:"ip route"},
+  {q:"Which command lists background jobs?",a:"jobs"},
+  {q:"Which command views system logs?",a:"journalctl"},
+  {q:"Which command sends a signal to a process?",a:"kill"},
+  {q:"Which command kills processes by name?",a:"killall"},
+  {q:"Which command views file contents one page at a time?",a:"less"},
+  {q:"Which command searches a file database?",a:"locate"},
+  {q:"Which command writes messages to the system log?",a:"logger"},
+  {q:"Which command rotates log files?",a:"logrotate"},
+  {q:"Which command lists directory contents?",a:"ls"},
+  {q:"Which command lists block devices?",a:"lsblk"},
+  {q:"Which command displays CPU information?",a:"lscpu"},
+  {q:"Which command displays manual pages?",a:"man"},
+  {q:"Which command creates a directory?",a:"mkdir"},
+  {q:"Which command mounts a filesystem?",a:"mount"},
+  {q:"Which command changes a user’s password?",a:"passwd"},
+  {q:"Which command searches for processes by name?",a:"pgrep"},
+  {q:"Which command tests network connectivity?",a:"ping"},
+  {q:"Which command kills processes by pattern?",a:"pkill"},
+  {q:"Which command lists running processes?",a:"ps"},
+  {q:"Which command shows all processes?",a:"ps aux"},
+  {q:"Which command prints the current working directory?",a:"pwd"},
+  {q:"Which command removes an empty directory?",a:"rmdir"},
+  {q:"Which command manages RPM packages?",a:"rpm"},
+  {q:"Which command synchronizes files and directories?",a:"rsync"},
+  {q:"Which daemon handles system logging?",a:"rsyslogd"},
+  {q:"Which command prints sequences of numbers?",a:"seq"},
+  {q:"Which command transfers files securely?",a:"sftp"},
+  {q:"Which command pauses execution for a number of seconds?",a:"sleep"},
+  {q:"Which command sorts text?",a:"sort"},
+  {q:"Which command shows socket statistics?",a:"ss"},
+  {q:"Which command connects to a remote system via SSH?",a:"ssh"},
+  {q:"Which daemon handles SSH connections?",a:"sshd"},
+  {q:"Which command switches users?",a:"su"},
+  {q:"Which command runs commands as root?",a:"sudo"},
+  {q:"Which command manages systemd services?",a:"systemctl"},
+  {q:"Which init system manages services and boot processes?",a:"systemd"},
+  {q:"Which daemon collects system logs for systemd?",a:"systemd-journald"},
+  {q:"Which command shows the end of a file?",a:"tail"},
+  {q:"Which command archives files?",a:"tar"},
+  {q:"Which command shows system resource usage?",a:"top"},
+  {q:"Which command creates an empty file or updates timestamps?",a:"touch"},
+  {q:"Which command traces the path to a network host?",a:"tracepath"},
+  {q:"Which command traces network hops?",a:"traceroute"},
+  {q:"Which command sets default file permissions?",a:"umask"},
+  {q:"Which command unmounts a filesystem?",a:"umount"},
+  {q:"Which command shows system information?",a:"uname"},
+  {q:"Which command extracts .zip files?",a:"unzip"},
+  {q:"Which command updates the locate database?",a:"updatedb"},
+  {q:"Which command shows system uptime?",a:"uptime"},
+  {q:"Which command creates a new user?",a:"useradd"},
+  {q:"Which command deletes a user?",a:"userdel"},
+  {q:"Which command modifies a user?",a:"usermod"},
+  {q:"Which text editor is commonly used in Linux?",a:"vim"},
+  {q:"Which command safely edits sudoers?",a:"visudo"},
+  {q:"Which command shows who is logged in?",a:"w"},
+  {q:"Which command shows the path of a command?",a:"which"},
+  {q:"Which command creates zip archives?",a:"zip"},
+  {q:"Which file runs when a user logs out of bash?",a:"~/.bash-logout"},
+  {q:"Which file runs at login before the shell starts?",a:"~/.bash_profile"},
+  {q:"Which file contains user-specific bash settings?",a:"~/.bashrc"},
+  {q:"Which directory stores user scripts?",a:"~/bin/"},
+  {q:"What is the root directory?",a:"/"},
+  {q:"Which directory contains essential binaries?",a:"/bin"},
+  {q:"Which file is the bash shell executable?",a:"/bin/bash"},
+  {q:"Which directory contains bootloader files?",a:"/boot"},
+  {q:"Which directory contains device files?",a:"/dev"},
+  {q:"Which file discards all output written to it?",a:"/dev/null"},
+  {q:"Which directory contains system configuration files?",a:"/etc"},
+  {q:"Which directory contains user home directories?",a:"/home"},
+  {q:"Which directory is the root user’s home?",a:"/root"},
+  {q:"Which directory stores log files?",a:"/var/log"},
+  {q:"Which directory stores anacron job timestamps?",a:"/var/spool/anacron/"}
+];
+
+function shuffle(a){return a.sort(()=>Math.random()-0.5);}
+shuffle(quizData);
+
+const pool = quizData.map(q=>q.a);
+let index=0, score=0;
+
+function loadQ(){
+  const q=quizData[index];
+  document.getElementById("question").textContent=q.q;
+  let choices=[q.a];
+  while(choices.length<4){
+    let c=pool[Math.floor(Math.random()*pool.length)];
+    if(!choices.includes(c)) choices.push(c);
+  }
+  shuffle(choices);
+  const div=document.getElementById("choices");
+  div.innerHTML="";
+  choices.forEach(c=>{
+    div.innerHTML+=`<div class="choice">
+      <input type="radio" name="c" value="${c}"> ${c}
+    </div>`;
+  });
+}
+
+function submitAnswer(){
+  const sel=document.querySelector("input[name='c']:checked");
+  if(!sel) return alert("Pick an answer.");
+  if(sel.value.toLowerCase()===quizData[index].a.toLowerCase()) score++;
+  index++;
+  if(index<quizData.length) loadQ();
+  else {
+    document.getElementById("quiz").style.display="none";
+    document.getElementById("result").textContent=
+      `Finished! Score: ${score} / ${quizData.length}`;
+  }
+}
+
+loadQ();
+</script>
+
+</body>
+</html>
