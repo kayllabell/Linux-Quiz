@@ -1,26 +1,43 @@
-// ---------------- MATRIX BACKGROUND ----------------
+// ... (Your Matrix background code remains at the top)
+ // ---------------- MATRIX BACKGROUND ----------------
+
 const matrix = document.getElementById('matrix');
+
 const columns = Math.floor(window.innerWidth / 20);
 
-for (let i = 0; i < columns; i++) {
-    const span = document.createElement('span');
-    span.textContent = String.fromCharCode(33 + Math.random() * 94 | 0);
-    span.style.left = `${i * 20}px`;
-    span.style.animationDelay = `${Math.random() * 5}s`;
-    span.style.fontSize = `${12 + Math.random() * 8}px`;
-    matrix.appendChild(span);
-}
 
-// ---------------- EVENT LISTENERS ----------------
-document.getElementById("startBtn").onclick = startQuiz;
+for (let i = 0; i < columns; i++) {
+
+    const span = document.createElement('span');
+
+    span.textContent = String.fromCharCode(33 + Math.random() * 94 | 0);
+
+    span.style.left = `${i * 20}px`;
+
+    span.style.animationDelay = `${Math.random() * 5}s`;
+
+    span.style.fontSize = `${12 + Math.random() * 8}px`;
+
+    matrix.appendChild(span);
+
+} 
+// ---------------- INITIALIZATION ----------------
+// This replaces the onclick event listeners
+window.onload = () => {
+    // Start the quiz automatically as soon as the window loads
+    startQuiz();
+};
+
 document.getElementById("next-btn").onclick = () => {
     current++;
     showQuestion();
 };
 
 function startQuiz() {
-    document.getElementById("cover").style.display = "none";
-    document.getElementById("quiz").style.display = "block";
+    // We no longer need to hide the cover or show the quiz div 
+    // if you've set them correctly in CSS, but let's be safe:
+    const quizDiv = document.getElementById("quiz");
+    if (quizDiv) quizDiv.style.display = "block";
 
     shuffle(questions);
     current = 0;
@@ -689,4 +706,5 @@ function showResults() {
 
     results.appendChild(table);
 }
+
 
