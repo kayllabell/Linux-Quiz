@@ -1,0 +1,73 @@
+/* Cyber theme */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 2px solid #0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #0f0;
+    position: relative;
+    z-index: 1;
+}
+
+h1, h2 {
+    text-align: center;
+    text-shadow: 0 0 10px #0f0;
+}
+
+.answers button, #next-btn {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    background: #000;
+    border: 2px solid #0f0;
+    color: #0f0;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+.answers button:hover, #next-btn:hover {
+    background-color: #0f0;
+    color: #000;
+    box-shadow: 0 0 10px #0f0;
+}
+
+.feedback {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+#next-btn { display: none; }
+
+.matrix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+.matrix span {
+    position: absolute;
+    color: #0f0;
+    animation: fall 5s linear infinite;
+}
+@keyframes fall {
+    0% { top: -20px; opacity: 0; }
+    50% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
